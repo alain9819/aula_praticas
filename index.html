@@ -1,0 +1,1767 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Roteiro Interativo Arduino: Controle de LED com Botão</title>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#f0f7ff',
+              100: '#e0effe',
+              500: '#0284c7',
+              600: '#0265d2',
+              700: '#0369a1',
+              800: '#075985',
+              900: '#0c4a6e',
+            },
+            arduino: '#00979d',
+            circuit: {
+              bg: '#121826',
+              card: '#1e293b',
+              border: '#334155',
+              wireRed: '#ef4444',
+              wireBlack: '#1e293b',
+              wireGreen: '#22c55e',
+              wireYellow: '#eab308'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            mono: ['Fira Code', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos Customizados */
+    html { scroll-behavior: smooth; }
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #0f172a; }
+    ::-webkit-scrollbar-thumb { background: #334155; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #475569; }
+
+    /* Efeito de brilho do LED */
+    .led-glow-on {
+      filter: drop-shadow(0 0 12px rgba(239, 68, 68, 0.9)) drop-shadow(0 0 25px rgba(239, 68, 68, 0.6));
+      fill: #ef4444 !important;
+    }
+    .led-glow-green-on {
+      filter: drop-shadow(0 0 12px rgba(34, 197, 94, 0.9)) drop-shadow(0 0 25px rgba(34, 197, 94, 0.6));
+      fill: #22c55e !important;
+    }
+    .led-glow-blue-on {
+      filter: drop-shadow(0 0 12px rgba(59, 130, 246, 0.9)) drop-shadow(0 0 25px rgba(59, 130, 246, 0.6));
+      fill: #3b82f6 !important;
+    }
+
+    /* Animação do botão físico no simulador */
+    .btn-pressed {
+      transform: translateY(3px);
+      box-shadow: inset 0 2px 4px rgba(0,0,0,0.5) !important;
+    }
+
+    /* Print customization for report */
+    @media print {
+      body * { visibility: hidden; }
+      #printable-report, #printable-report * { visibility: visible; }
+      #printable-report { position: absolute; left: 0; top: 0; width: 100%; color: #000; background: #fff; }
+      .no-print { display: none !important; }
+    }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased selection:bg-arduino selection:text-white">
+
+  <!-- TOP HEADER / NAVBAR -->
+  <header class="fixed top-0 left-0 right-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 lg:px-8 py-3 flex items-center justify-between">
+    <div class="flex items-center space-x-3">
+      <button id="toggleSidebar" class="lg:hidden text-slate-400 hover:text-white p-2 rounded-lg bg-slate-800">
+        <i class="fa-solid fa-bars text-lg"></i>
+      </button>
+      <div class="flex items-center space-x-2">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-arduino to-teal-400 flex items-center justify-center text-white font-bold text-lg shadow-lg shadow-teal-500/20">
+          <i class="fa-solid fa-microchip"></i>
+        </div>
+        <div>
+          <h1 class="text-base font-bold text-slate-100 leading-tight">Robótica Educacional</h1>
+          <p class="text-xs text-teal-400 font-medium">Arduino: Entradas, Saídas e LED</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Barra de Progresso Global -->
+    <div class="hidden md:flex items-center space-x-4 flex-1 max-w-xs mx-8">
+      <div class="w-full">
+        <div class="flex justify-between text-xs font-semibold mb-1">
+          <span class="text-slate-400">Progresso do Estudo</span>
+          <span id="globalProgressPercent" class="text-teal-400">0%</span>
+        </div>
+        <div class="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+          <div id="globalProgressBar" class="h-full bg-gradient-to-r from-arduino to-emerald-400 transition-all duration-300 w-0"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center space-x-2">
+      <button id="themeToggle" class="p-2.5 text-slate-400 hover:text-yellow-400 hover:bg-slate-800 rounded-xl transition-colors" title="Alternar Tema">
+        <i class="fa-solid fa-sun text-lg"></i>
+      </button>
+      <a href="#simulador" class="hidden sm:flex items-center space-x-2 px-3.5 py-2 bg-arduino/20 hover:bg-arduino/30 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-semibold transition-all">
+        <i class="fa-solid fa-play text-teal-400">="fa-solid"></i>
+        <span>Simulador Vivo</span>
+      </a>
+    </div>
+  </header>
+
+  <!-- MAIN WRAPPER -->
+  <div class="pt-16 flex min-h-screen">
+
+    <!-- SIDEBAR DE NAVEGAÇÃO -->
+    <aside id="sidebar" class="fixed lg:sticky top-16 left-0 z-40 w-72 h-[calc(100vh-4rem)] bg-slate-900 border-r border-slate-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 overflow-y-auto flex flex-col justify-between p-4">
+      <div class="space-y-6">
+        <div>
+          <h2 class="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3 px-2">Sumário do Roteiro</h2>
+          <nav class="space-y-1 text-sm font-medium" id="tocNav">
+            <a href="#sec-1" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">1. O que vamos aprender?</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-2" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">2. Funcionamento do Projeto</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-3" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">3. Etapa 1 — Tinkercad</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-4" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">4. Etapa 2 — Componentes</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-5" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">5. Etapa 3 — Montando Circuito</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-6" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">6. Etapa 4 — Algoritmo</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-7" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">7. Etapa 5 — Programando</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#simulador" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-teal-300 bg-teal-500/10 hover:bg-teal-500/20 font-semibold border border-teal-500/20 transition-all">
+              <span class="truncate">⚡ Simulador Interativo</span>
+              <i class="fa-solid fa-bolt text-teal-400"></i>
+            </a>
+            <a href="#sec-8" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">8. Etapa 6 — Simulação</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-9" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">9. Etapa 7 — Desafios</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-10" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">10. Etapa 8 — Investigando Erros</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-11" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">11. Etapa 9 — Desafio Final</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-12" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">12. Etapa 10 — Relatório</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-13" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">13. Checklist Aprendizagem</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+            <a href="#sec-14" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">14. Autoavaliação</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
+          </nav>
+        </div>
+      </div>
+
+      <!-- Footer da Sidebar -->
+      <div class="pt-4 border-t border-slate-800 text-xs text-slate-500">
+        <div class="flex items-center space-x-2 mb-2 text-slate-400 font-semibold">
+          <i class="fa-solid fa-graduation-cap text-arduino"></i>
+          <span>STEM / Robótica</span>
+        </div>
+        <p>2 Aulas (100 min) • Tinkercad Circuits</p>
+      </div>
+    </aside>
+
+    <!-- Overlay Mobile -->
+    <div id="sidebarOverlay" class="fixed inset-0 bg-black/60 z-30 hidden lg:hidden backdrop-blur-sm"></div>
+
+    <!-- CONTEÚDO PRINCIPAL -->
+    <main class="flex-1 p-4 md:p-8 lg:p-12 max-w-5xl mx-auto space-y-16 overflow-x-hidden">
+
+      <!-- BANNER DE BOAS VINDAS -->
+      <section class="relative bg-gradient-to-br from-slate-900 via-slate-900 to-slate-800 border border-slate-800 rounded-3xl p-6 md:p-10 shadow-2xl overflow-hidden">
+        <div class="absolute -top-24 -right-24 w-80 h-80 bg-arduino/20 rounded-full blur-3xl pointer-events-none"></div>
+        
+        <div class="relative z-10 space-y-4">
+          <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-teal-500/10 border border-teal-500/30 text-teal-300 text-xs font-semibold">
+            <i class="fa-solid fa-rocket"></i>
+            <span>Projeto Prático de Automação #01</span>
+          </div>
+
+          <h1 class="text-3xl md:text-5xl font-extrabold text-white tracking-tight leading-tight">
+            Arduino: Entradas, Saídas e Automação com LED
+          </h1>
+
+          <p class="text-slate-300 text-base md:text-lg max-w-3xl leading-relaxed">
+            Aprenda os fundamentos da robótica e eletrônica criando um sistema inteligente de acionamento por botão simulado no Tinkercad.
+          </p>
+
+          <div class="pt-4 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-slate-800/80 text-xs md:text-sm">
+            <div>
+              <span class="text-slate-500 block">Público-alvo</span>
+              <span class="text-slate-200 font-semibold">Iniciantes em Robótica</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Plataforma</span>
+              <span class="text-teal-400 font-semibold">Tinkercad Circuits</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Duração Sugerida</span>
+              <span class="text-slate-200 font-semibold">2 aulas de 50 min</span>
+            </div>
+            <div>
+              <span class="text-slate-500 block">Metodologia</span>
+              <span class="text-slate-200 font-semibold">Desafios Práticos</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 1: O QUE VAMOS APRENDER -->
+      <section id="sec-1" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            1
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">O que vamos aprender?</h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed text-base">
+          Neste projeto, você vai construir e programar um circuito eletrônico capaz de controlar um LED utilizando um botão. O objetivo principal é compreender como o Arduino recebe informações de um componente de entrada, processa essas informações por meio de um programa e controla um componente de saída.
+        </p>
+
+        <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <h3 class="text-lg font-semibold text-teal-300 flex items-center space-x-2">
+            <i class="fa-solid fa-bullseye"></i>
+            <span>Objetivos de Aprendizagem</span>
+          </h3>
+          <div class="grid md:grid-cols-2 gap-3 text-sm">
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Identificar a diferença entre dispositivos de entrada e de saída.</span>
+            </div>
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Reconhecer a função central do Arduino em um circuito eletrônico.</span>
+            </div>
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Montar um circuito com Arduino, protoboard, botão, LED e resistores.</span>
+            </div>
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Programar o Arduino para ler o estado lógico de um botão.</span>
+            </div>
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Criar uma lógica condicional para acionar o LED.</span>
+            </div>
+            <div class="flex items-start space-x-3 p-3 rounded-xl bg-slate-800/50 border border-slate-800">
+              <i class="fa-solid fa-check text-emerald-400 mt-0.5"></i>
+              <span class="text-slate-200">Testar, depurar e modificar o código para novos comportamentos.</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 2: FUNCIONAMENTO DO PROJETO -->
+      <section id="sec-2" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            2
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Conhecendo o funcionamento do projeto</h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed">
+          Antes de montar o circuito, precisamos compreender como os componentes trabalham juntos. Imagine uma lâmpada inteligente que acende quando você aperta um botão: cada peça cumpre um papel fundamental no fluxo da informação.
+        </p>
+
+        <!-- Tabela de Componentes -->
+        <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900">
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="bg-slate-800/80 text-xs uppercase text-teal-300 font-semibold border-b border-slate-800">
+              <tr>
+                <th class="p-4">Componente</th>
+                <th class="p-4">Função Prática</th>
+                <th class="p-4">Classificação</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/60">
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-4 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-amber-400 inline-block"></span>
+                  <span>Botão de Pressão</span>
+                </td>
+                <td class="p-4">Informa ao Arduino quando é pressionado pelo usuário.</td>
+                <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs bg-blue-500/10 text-blue-400 border border-blue-500/30 font-semibold">Entrada</span></td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-4 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-teal-400 inline-block"></span>
+                  <span>Arduino Uno</span>
+                </td>
+                <td class="p-4">Lê as informações de entrada e executa as instruções do programa.</td>
+                <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs bg-purple-500/10 text-purple-400 border border-purple-500/30 font-semibold">Processamento</span></td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-4 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-red-400 inline-block"></span>
+                  <span>LED</span>
+                </td>
+                <td class="p-4">Emite luz visível quando recebe corrente elétrica do pino.</td>
+                <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs bg-emerald-500/10 text-emerald-400 border border-emerald-500/30 font-semibold">Saída</span></td>
+              </tr>
+              <tr class="hover:bg-slate-800/30 transition-colors">
+                <td class="p-4 font-semibold text-white flex items-center space-x-2">
+                  <span class="w-3 h-3 rounded-full bg-slate-400 inline-block"></span>
+                  <span>Resistores</span>
+                </td>
+                <td class="p-4">Limitam a corrente elétrica protegendo os componentes contra danos.</td>
+                <td class="p-4"><span class="px-2.5 py-1 rounded-full text-xs bg-slate-700 text-slate-300 border border-slate-600 font-semibold">Proteção / Estabilização</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Diagrama de Fluxo das 4 Etapas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+          <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl relative">
+            <span class="text-xs font-bold text-blue-400 uppercase tracking-wider">Passo 1</span>
+            <h4 class="text-white font-bold text-lg mt-1">1. Entrada</h4>
+            <p class="text-slate-400 text-xs mt-2">O usuário pressiona o botão físico gerando um nível lógico HIGH (5V).</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl relative">
+            <span class="text-xs font-bold text-purple-400 uppercase tracking-wider">Passo 2</span>
+            <h4 class="text-white font-bold text-lg mt-1">2. Processamento</h4>
+            <p class="text-slate-400 text-xs mt-2">O Arduino lê o Pino 2 digital e avalia a condição do código programado.</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl relative">
+            <span class="text-xs font-bold text-emerald-400 uppercase tracking-wider">Passo 3</span>
+            <h4 class="text-white font-bold text-lg mt-1">3. Saída</h4>
+            <p class="text-slate-400 text-xs mt-2">O Arduino envia 5V pelo Pino 8 digital acionando o circuito do LED.</p>
+          </div>
+          <div class="bg-slate-900 border border-slate-800 p-4 rounded-2xl relative">
+            <span class="text-xs font-bold text-amber-400 uppercase tracking-wider">Passo 4</span>
+            <h4 class="text-white font-bold text-lg mt-1">4. Resultado</h4>
+            <p class="text-slate-400 text-xs mt-2">O LED acende instantaneamente e se apaga ao soltar o botão.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 3: ETAPA 1 - TINKERCAD -->
+      <section id="sec-3" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            3
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 1 — Acessando o Tinkercad</h2>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <h3 class="text-base font-bold text-white">Guia Passo a Passo:</h3>
+          <ol class="space-y-3 text-sm text-slate-300 list-decimal list-inside">
+            <li class="pl-2">Abra o navegador de internet no seu notebook ou computador.</li>
+            <li class="pl-2">
+              Acesse o site oficial: 
+              <a href="https://www.tinkercad.com/" target="_blank" rel="noopener noreferrer" class="text-teal-400 underline font-semibold hover:text-teal-300">
+                https://www.tinkercad.com/ <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+              </a>
+            </li>
+            <li class="pl-2">Entre na sua conta existente ou faça seu cadastro escolar conforme orientação do professor.</li>
+            <li class="pl-2">No menu lateral esquerdo, navegue até a seção de projetos de circuitos chamados <strong>Circuits</strong>.</li>
+            <li class="pl-2">Clique no botão <strong>Criar novo circuito</strong> e altere o nome no canto superior para: <code class="bg-slate-800 text-teal-300 px-2 py-0.5 rounded font-mono text-xs">Projeto 01 - Controle de LED com Botão</code></li>
+            <li class="pl-2">Certifique-se de que a área de trabalho do simulador está pronta.</li>
+          </ol>
+
+          <!-- Desafio Rápido Callout -->
+          <div class="mt-4 p-4 bg-teal-950/40 border border-teal-500/30 rounded-xl flex items-start space-x-3">
+            <i class="fa-solid fa-lightbulb text-teal-400 text-xl mt-0.5"></i>
+            <div>
+              <h4 class="font-bold text-teal-300 text-sm">Desafio rápido no Tinkercad:</h4>
+              <p class="text-xs text-slate-300 mt-1">Antes de continuar, tente localizar onde ficam a lista de componentes à direita, o painel central de montagem e o botão verde "Iniciar Simulação" no topo!</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 4: ETAPA 2 - COMPONENTES -->
+      <section id="sec-4" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            4
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 2 — Adicionando os componentes</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Abra o menu lateral de componentes no Tinkercad e arraste os itens abaixo para sua área de trabalho:
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-xl font-bold border border-teal-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Arduino Uno R3</h4>
+              <p class="text-slate-400 text-xs">Microcontrolador central</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-teal-500/10 text-teal-400 flex items-center justify-center text-xl font-bold border border-teal-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Protoboard (Placa de ensaio)</h4>
+              <p class="text-slate-400 text-xs">Organização das conexões</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-red-500/10 text-red-400 flex items-center justify-center text-xl font-bold border border-red-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">LED difuso (Vermelho)</h4>
+              <p class="text-slate-400 text-xs">Indicador luminoso visual</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center text-xl font-bold border border-amber-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Resistor de 220 Ω</h4>
+              <p class="text-slate-400 text-xs">Limita a corrente do LED</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-blue-500/10 text-blue-400 flex items-center justify-center text-xl font-bold border border-blue-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Botão de Pressão (Push Button)</h4>
+              <p class="text-slate-400 text-xs">Sinal elétrico de entrada</p>
+            </div>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex items-center space-x-4">
+            <div class="w-12 h-12 rounded-xl bg-purple-500/10 text-purple-400 flex items-center justify-center text-xl font-bold border border-purple-500/20">
+              1x
+            </div>
+            <div>
+              <h4 class="font-bold text-white text-sm">Resistor de 10 kΩ</h4>
+              <p class="text-slate-400 text-xs">Resistor Pull-down do botão</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-4 bg-slate-900/60 border border-slate-800 rounded-xl text-xs text-slate-400 flex items-center space-x-3">
+          <i class="fa-solid fa-triangle-exclamation text-amber-400 text-base"></i>
+          <span><strong>Atenção:</strong> A posição simples dos componentes na tela não determina o funcionamento. O mais importante é realizar as conexões elétricas nos pinos corretos!</span>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 5: ETAPA 3 - MONTANDO O CIRCUITO -->
+      <section id="sec-5" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            5
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 3 — Montando o circuito eletrônico</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Siga com atenção as três etapas de fiação para garantir que a alimentação, a saída (LED) e a entrada (Botão) estejam perfeitas.
+        </p>
+
+        <!-- Instruções Parte A, B, C em Cards com Abas/Accordion -->
+        <div class="space-y-4">
+          <!-- Parte A -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <h3 class="text-base font-bold text-teal-300 flex items-center space-x-2">
+              <span class="w-6 h-6 rounded-full bg-teal-500/20 text-teal-400 text-xs flex items-center justify-center">A</span>
+              <span>Parte A — Conectando a Alimentação</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside pl-2">
+              <li>Identifique os pinos <strong>5V</strong> e <strong>GND</strong> no barramento de alimentação do Arduino Uno.</li>
+              <li>Ligue o pino <strong class="text-red-400">5V</strong> ao trilho positivo (+) marcado em vermelho na protoboard.</li>
+              <li>Ligue o pino <strong class="text-slate-400">GND</strong> ao trilho negativo (-) marcado em azul/preto na protoboard.</li>
+            </ul>
+          </div>
+
+          <!-- Parte B -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <h3 class="text-base font-bold text-emerald-300 flex items-center space-x-2">
+              <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center">B</span>
+              <span>Parte B — Conectando o LED</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside pl-2">
+              <li>Posicione o LED em duas linhas distintas da protoboard.</li>
+              <li>Identifique seus dois terminais:
+                <ul class="pl-6 list-square text-xs text-slate-400 mt-1 space-y-1">
+                  <li><strong>Ânodo (+):</strong> terminal positivo (perna mais longa / curvada).</li>
+                  <li><strong>Cátodo (-):</strong> terminal negativo (perna mais curta / lado chato).</li>
+                </ul>
+              </li>
+              <li>Ligue o <strong>Ânodo do LED</strong> ao resistor de <strong>220 Ω</strong>.</li>
+              <li>Conecte a outra ponta do resistor de 220 Ω ao <strong class="text-teal-300">Pino Digital 8</strong> do Arduino.</li>
+              <li>Conecte o <strong>Cátodo do LED</strong> ao trilho negativo (GND).</li>
+            </ul>
+            <div class="text-xs bg-slate-800/80 p-3 rounded-xl font-mono text-emerald-300 border border-slate-700">
+              ⚡ Caminho do circuito LED: Pino Digital 8 ➔ Resistor 220 Ω ➔ Ânodo LED ➔ Cátodo LED ➔ GND
+            </div>
+          </div>
+
+          <!-- Parte C -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <h3 class="text-base font-bold text-blue-300 flex items-center space-x-2">
+              <span class="w-6 h-6 rounded-full bg-blue-500/20 text-blue-400 text-xs flex items-center justify-center">C</span>
+              <span>Parte C — Conectando o Botão (Configuração Pull-down)</span>
+            </h3>
+            <ul class="space-y-2 text-sm text-slate-300 list-disc list-inside pl-2">
+              <li>Encaixe o botão na protoboard atravessando a divisória central.</li>
+              <li>Conecte um terminal de um dos lados do botão ao pino <strong>5V</strong>.</li>
+              <li>Conecte o terminal oposto do botão ao <strong class="text-teal-300">Pino Digital 2</strong> do Arduino.</li>
+              <li>Conecte o resistor de <strong>10 kΩ</strong> exatamente entre o pino Digital 2 e o trilho <strong>GND</strong>.</li>
+            </ul>
+            <p class="text-xs text-slate-400 bg-slate-800/50 p-3 rounded-xl border border-slate-700">
+              💡 <strong>O que é Pull-down?</strong> O resistor de 10 kΩ garante que a entrada do Pino 2 permaneça com valor LOW (0V) estável enquanto o botão estiver solto, prevenindo ruídos elétricos.
+            </p>
+          </div>
+        </div>
+
+        <!-- Tabela Resumo de Conexões -->
+        <div class="overflow-x-auto rounded-2xl border border-slate-800 bg-slate-900 mt-6">
+          <div class="p-4 bg-slate-800/60 font-bold text-white text-sm border-b border-slate-800">
+            📋 Conferência Rápida das Conexões Físicas
+          </div>
+          <table class="w-full text-left text-sm text-slate-300">
+            <thead class="bg-slate-950 text-xs uppercase text-slate-400">
+              <tr>
+                <th class="p-3">Componente</th>
+                <th class="p-3">Conexão Destino no Arduino / Protoboard</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-800/50">
+              <tr>
+                <td class="p-3 font-semibold text-white">Alimentação Positiva</td>
+                <td class="p-3 text-red-400 font-mono">Pino 5V ➔ Trilho Positivo (+)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-white">Referência Elétrica</td>
+                <td class="p-3 text-slate-400 font-mono">Pino GND ➔ Trilho Negativo (-)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-white">Botão de Pressão</td>
+                <td class="p-3 text-blue-400 font-mono">Pino Digital 2 (Entrada)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-white">LED (com resistor 220 Ω)</td>
+                <td class="p-3 text-emerald-400 font-mono">Pino Digital 8 (Saída)</td>
+              </tr>
+              <tr>
+                <td class="p-3 font-semibold text-white">Resistor 10 kΩ (Pull-down)</td>
+                <td class="p-3 text-purple-400 font-mono">Entre o Pino Digital 2 e o GND</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pergunta de Reflexão Interativa -->
+        <div class="p-5 bg-gradient-to-r from-slate-900 to-indigo-950/40 border border-indigo-500/30 rounded-2xl space-y-3">
+          <div class="flex items-center space-x-2 text-indigo-400 font-bold text-sm">
+            <i class="fa-solid fa-question-circle"></i>
+            <span>Pergunta para refletir:</span>
+          </div>
+          <p class="text-slate-200 text-sm">Por que não podemos conectar o LED diretamente ao pino do Arduino sem utilizar o resistor de 220 Ω?</p>
+          <details class="cursor-pointer text-xs">
+            <summary class="text-indigo-400 hover:text-indigo-300 font-semibold select-none">
+              Ver explicação do professor...
+            </summary>
+            <div class="mt-2 p-3 bg-slate-900 rounded-xl text-slate-300 space-y-1 border border-slate-800">
+              <p>O LED possui uma resistência interna muito baixa. Se for ligado diretamente a 5V sem resistor, a corrente elétrica será excessivamente alta, podendo queimar a porta digital do Arduino ou o próprio LED instantaneamente.</p>
+            </div>
+          </details>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 6: ETAPA 4 - ALGORITMO -->
+      <section id="sec-6" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            6
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 4 — Criando o algoritmo</h2>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed">
+          Antes de digitar código em C++, precisamos escrever a lógica do sistema em português estruturado (linguagem natural). O problema central é: <strong class="text-teal-300">"Como fazer o LED acender somente quando o botão estiver pressionado?"</strong>
+        </p>
+
+        <div class="grid md:grid-cols-2 gap-6">
+          <!-- Algoritmo em Linguagem Natural -->
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+            <h3 class="text-base font-bold text-white flex items-center space-x-2">
+              <i class="fa-solid fa-list-ol text-teal-400"></i>
+              <span>Passo 1 — Algoritmo Natural</span>
+            </h3>
+            <ol class="space-y-2 text-xs md:text-sm text-slate-300 font-mono">
+              <li class="p-2 bg-slate-800/40 rounded-lg">1. Iniciar o programa.</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">2. Configurar o pino 2 como ENTRADA.</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">3. Configurar o pino 8 como SAÍDA.</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">4. Ler o estado lógico do botão (pino 2).</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">5. Verificar: o botão está pressionado (HIGH)?</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">6. SE SIM: acender o LED (pino 8 HIGH).</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">7. SENÃO: apagar o LED (pino 8 LOW).</li>
+              <li class="p-2 bg-slate-800/40 rounded-lg">8. Repetir continuamente (Loop).</li>
+            </ol>
+          </div>
+
+          <!-- Tabela Lógica & Instruções C++ -->
+          <div class="space-y-4">
+            <!-- Tabela de Estados -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3">
+              <h3 class="text-base font-bold text-white flex items-center space-x-2">
+                <i class="fa-solid fa-table text-teal-400"></i>
+                <span>Passo 2 — Matriz Verdade Lógica</span>
+              </h3>
+              <table class="w-full text-center text-xs">
+                <thead class="bg-slate-800 text-teal-300 uppercase font-semibold">
+                  <tr>
+                    <th class="p-2 rounded-l-lg">Ação Física</th>
+                    <th class="p-2">Leitura Arduino</th>
+                    <th class="p-2 rounded-r-lg">Estado LED</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 text-slate-300">
+                  <tr>
+                    <td class="p-2.5">Botão Solto</td>
+                    <td class="p-2.5 font-mono text-slate-400">LOW (0V)</td>
+                    <td class="p-2.5 font-bold text-slate-500">APAGADO</td>
+                  </tr>
+                  <tr>
+                    <td class="p-2.5">Botão Pressionado</td>
+                    <td class="p-2.5 font-mono text-emerald-400">HIGH (5V)</td>
+                    <td class="p-2.5 font-bold text-red-400">ACESO 💡</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            <!-- Instruções C++ -->
+            <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-2">
+              <h3 class="text-sm font-bold text-white">Comandos Prédio do C++ Arduino:</h3>
+              <ul class="text-xs space-y-1.5 text-slate-300 font-mono">
+                <li><span class="text-purple-400">pinMode(pino, modo)</span> - Define pino como INPUT/OUTPUT</li>
+                <li><span class="text-purple-400">digitalRead(pino)</span> - Lê estado digital (HIGH/LOW)</li>
+                <li><span class="text-purple-400">digitalWrite(pino, valor)</span> - Envia estado (HIGH/LOW)</li>
+                <li><span class="text-purple-400">if / else</span> - Estrutura de tomada de decisão condicional</li>
+                <li><span class="text-purple-400">loop()</span> - Função de repetição infinita do sistema</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 7: ETAPA 5 - PROGRAMANDO -->
+      <section id="sec-7" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            7
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 5 — Programando o Arduino</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Abaixo está o código C++ completo para ser inserido no Tinkercad (Modo Texto). Você pode copiar este código com um clique!
+        </p>
+
+        <!-- Bloco de Código com Sintaxe e Botão Copiar -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+          <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-xs font-mono text-slate-400 ml-2">controle_led_botao.ino</span>
+            </div>
+            <button id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copiar Código</span>
+            </button>
+          </div>
+
+          <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: CONTROLE DE LED COM BOTÃO - CÓDIGO BASE</span>
+
+<span class="text-slate-500">// Definição dos pinos</span>
+<span class="text-purple-400">int</span> botao = <span class="text-amber-300">2</span>;
+<span class="text-purple-400">int</span> led = <span class="text-amber-300">8</span>;
+
+<span class="text-purple-400">void</span> <span class="text-blue-400">setup</span>() {
+  <span class="text-slate-500">// Configura o pino do botão como entrada</span>
+  <span class="text-teal-400">pinMode</span>(botao, <span class="text-teal-300">INPUT</span>);
+
+  <span class="text-slate-500">// Configura o pino do LED como saída</span>
+  <span class="text-teal-400">pinMode</span>(led, <span class="text-teal-300">OUTPUT</span>);
+}
+
+<span class="text-purple-400">void</span> <span class="text-blue-400">loop</span>() {
+  <span class="text-slate-500">// Lê o estado lógico do botão (HIGH ou LOW)</span>
+  <span class="text-purple-400">int</span> estadoBotao = <span class="text-teal-400">digitalRead</span>(botao);
+
+  <span class="text-slate-500">// Verifica se o botão está pressionado</span>
+  <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {
+    <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Acende o LED</span>
+  } <span class="text-purple-400">else</span> {
+    <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Apaga o LED</span>
+  }
+}</code></pre>
+        </div>
+
+        <!-- Análise Técnica do Código -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h4 class="font-bold text-teal-300">1. Variáveis de Pino</h4>
+            <p class="text-slate-400">Criamos <code class="text-amber-300">int botao = 2;</code> e <code class="text-amber-300">led = 8;</code> para que possamos trocar portas facilmente em um só lugar caso o circuito mude.</p>
+          </div>
+          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h4 class="font-bold text-teal-300">2. Função setup()</h4>
+            <p class="text-slate-400">Executada uma única vez na energização. Define quem vai ler dados (<code class="text-teal-300">INPUT</code>) e quem vai enviar corrente (<code class="text-teal-300">OUTPUT</code>).</p>
+          </div>
+          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h4 class="font-bold text-teal-300">3. Decisão no loop()</h4>
+            <p class="text-slate-400">A instrução <code class="text-purple-400">if/else</code> avalia milissegundo a milissegundo o estado lido por <code class="text-teal-400">digitalRead</code> e toma a decisão.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO INTERATIVA DESTACADA: SIMULADOR DE CIRCUITO VIVO (TEST BENCH) -->
+      <section id="simulador" class="scroll-mt-24 space-y-6">
+        <div class="relative bg-slate-900 border-2 border-teal-500/50 rounded-3xl p-6 md:p-8 shadow-2xl space-y-6 overflow-hidden">
+          <div class="absolute top-0 right-0 px-4 py-1.5 bg-teal-500 text-slate-950 font-extrabold text-xs uppercase tracking-wider rounded-bl-2xl">
+            Laboratório Virtual Ativo
+          </div>
+
+          <div class="space-y-2">
+            <div class="flex items-center space-x-2 text-teal-400 font-bold">
+              <i class="fa-solid fa-flask-vial text-xl"></i>
+              <h2 class="text-2xl md:text-3xl font-extrabold text-white">Simulador Interativo do Circuito</h2>
+            </div>
+            <p class="text-slate-300 text-sm">
+              Experimente o funcionamento do circuito direto na página! Pressione o botão físico abaixo ou selecione o modo de programa ativo.
+            </p>
+          </div>
+
+          <!-- Seleção de Modo do Simulador -->
+          <div class="flex flex-wrap gap-2 pt-2">
+            <button data-sim-mode="standard" class="sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-teal-500 text-slate-950 shadow-md transition-all">
+              1. Lógica Padrão (Aperta ➔ Acende)
+            </button>
+            <button data-sim-mode="inverted" class="sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+              2. Lógica Invertida (Desafio 1)
+            </button>
+            <button data-sim-mode="delay" class="sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+              3. Delay 2 Segundos (Desafio 2)
+            </button>
+            <button data-sim-mode="blink3" class="sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all">
+              4. Piscar 3 Vezes (Desafio 3)
+            </button>
+          </div>
+
+          <!-- CANVAS DE SIMULAÇÃO GRÁFICA / BANCADA DE TESTES -->
+          <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 bg-slate-950 p-6 rounded-2xl border border-slate-800 items-center">
+            
+            <!-- ESQUEMA VISUAL SVG DO CIRCUITO -->
+            <div class="lg:col-span-7 flex flex-col items-center justify-center p-4 bg-slate-900 rounded-xl border border-slate-800 relative">
+              
+              <svg id="circuitSvg" viewBox="0 0 500 350" class="w-full h-auto max-w-md select-none">
+                <!-- Protoboard fundo -->
+                <rect x="50" y="40" width="400" height="270" rx="15" fill="#1e293b" stroke="#334155" stroke-width="3"/>
+                <text x="250" y="62" fill="#64748b" font-size="11" font-weight="bold" text-anchor="middle">BANCADA DE TESTES VIRTUAL</text>
+
+                <!-- Trilhos de Alimentação -->
+                <line x1="70" y1="80" x2="430" y2="80" stroke="#ef4444" stroke-width="3" stroke-dasharray="4,2"/>
+                <text x="438" y="84" fill="#ef4444" font-size="10" font-weight="bold">+</text>
+                <line x1="70" y1="95" x2="430" y2="95" stroke="#38bdf8" stroke-width="3" stroke-dasharray="4,2"/>
+                <text x="438" y="99" fill="#38bdf8" font-size="10" font-weight="bold">-</text>
+
+                <!-- Arduino Placa Simbolizada -->
+                <rect x="70" y="120" width="120" height="170" rx="8" fill="#00979d" stroke="#14b8a6" stroke-width="2"/>
+                <text x="130" y="145" fill="#ffffff" font-size="12" font-weight="extrabold" text-anchor="middle">ARDUINO UNO</text>
+
+                <!-- Pinos Digitais Arduino -->
+                <circle id="pin2Dot" cx="175" cy="180" r="5" fill="#38bdf8"/>
+                <text x="140" y="184" fill="#ffffff" font-size="9" font-weight="bold">PINO 2 (IN)</text>
+
+                <circle id="pin8Dot" cx="175" cy="220" r="5" fill="#ef4444"/>
+                <text x="140" y="224" fill="#ffffff" font-size="9" font-weight="bold">PINO 8 (OUT)</text>
+
+                <!-- BOTÃO FÍSICO INTERATIVO NO SVG -->
+                <g id="svgButtonGroup" class="cursor-pointer">
+                  <rect x="230" y="150" width="70" height="70" rx="10" fill="#334155" stroke="#475569" stroke-width="3"/>
+                  <circle id="svgButtonCap" cx="265" cy="185" r="22" fill="#2563eb" class="transition-all duration-100 shadow-lg"/>
+                  <text x="265" y="189" fill="#ffffff" font-size="10" font-weight="bold" text-anchor="middle" pointer-events="none">PUSH</text>
+                </g>
+                <text x="265" y="235" fill="#94a3b8" font-size="10" font-anchor="middle" text-anchor="middle">Botão de Entrada</text>
+
+                <!-- RESISTOR 10K PULL DOWN -->
+                <rect x="255" y="250" width="20" height="8" fill="#a855f7" rx="2"/>
+                <text x="265" y="270" fill="#a855f7" font-size="8" text-anchor="middle">10kΩ Pull-Down</text>
+
+                <!-- LED INTERATIVO -->
+                <g id="svgLedGroup">
+                  <!-- Resistor 220 Ohm -->
+                  <rect x="355" y="160" width="25" height="8" fill="#eab308" rx="2"/>
+                  <text x="367" y="153" fill="#eab308" font-size="8" text-anchor="middle">220Ω</text>
+
+                  <!-- LED Cúpula -->
+                  <path id="svgLedBulb" d="M 360,200 A 15,15 0 0,1 390,200 L 390,215 L 360,215 Z" fill="#475569" class="transition-all duration-200"/>
+                  <rect x="355" y="215" width="40" height="4" fill="#94a3b8"/>
+                  <text x="375" y="235" fill="#f87171" font-size="10" font-weight="bold" text-anchor="middle">LED Saída</text>
+                </g>
+
+                <!-- Fios Conectores com Mudança Dinâmica de Cor -->
+                <!-- Fio Botão -> Pino 2 -->
+                <path id="wirePin2" d="M 175,180 Q 200,180 230,185" fill="none" stroke="#64748b" stroke-width="3"/>
+                <!-- Fio Pino 8 -> Resistor/LED -->
+                <path id="wirePin8" d="M 175,220 Q 270,220 355,164" fill="none" stroke="#64748b" stroke-width="3"/>
+              </svg>
+
+              <!-- Botão de Ação Manual de Pressionar -->
+              <div class="mt-4 flex flex-col items-center space-y-2">
+                <button id="simPhysicalBtn" class="px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white font-extrabold rounded-2xl shadow-xl border border-blue-400/30 transition-all flex items-center space-x-3 select-none">
+                  <i class="fa-solid fa-fingerprint text-xl"></i>
+                  <span>PRESSIONAR BOTÃO (MANTER)</span>
+                </button>
+                <span class="text-xs text-slate-400">Dica: Você também pode clicar e segurar no botão azul do desenho ou apertar ESPAÇO no teclado.</span>
+              </div>
+            </div>
+
+            <!-- PAINEL DE MONITORAMENTO DE ESTADOS E LOGS -->
+            <div class="lg:col-span-5 space-y-4">
+              <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-3">
+                <h4 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Monitor Digital dos Pinos</h4>
+                
+                <!-- Status Pino 2 -->
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <div class="flex items-center space-x-2">
+                    <span id="badgePin2" class="w-3 h-3 rounded-full bg-slate-600"></span>
+                    <span class="text-xs font-semibold text-slate-300">Entrada (Pino 2)</span>
+                  </div>
+                  <span id="valPin2" class="text-xs font-mono font-bold text-slate-400">0V (LOW)</span>
+                </div>
+
+                <!-- Status Pino 8 -->
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <div class="flex items-center space-x-2">
+                    <span id="badgePin8" class="w-3 h-3 rounded-full bg-slate-600"></span>
+                    <span class="text-xs font-semibold text-slate-300">Saída LED (Pino 8)</span>
+                  </div>
+                  <span id="valPin8" class="text-xs font-mono font-bold text-slate-400">0V (LOW)</span>
+                </div>
+
+                <!-- Indicador Estado LED -->
+                <div class="flex items-center justify-between p-3 rounded-lg bg-slate-950 border border-slate-800">
+                  <span class="text-xs font-semibold text-slate-300">Estado do LED</span>
+                  <span id="ledStatusBadge" class="px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-500">APAGADO</span>
+                </div>
+              </div>
+
+              <!-- Serial Monitor Output Virtual -->
+              <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
+                <div class="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-1">
+                  <span>Monitor Serial / Logs</span>
+                  <span class="text-[10px] font-mono text-teal-400">9600 baud</span>
+                </div>
+                <div id="simTerminalLog" class="h-24 overflow-y-auto font-mono text-[11px] text-teal-300/90 space-y-0.5 pt-1">
+                  <div>[SISTEMA] Simulador iniciado. Aguardando interação...</div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 8: ETAPA 6 - EXECUÇÃO NA PRÁTICA -->
+      <section id="sec-8" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            8
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Executando a simulação no Tinkercad</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Após testar em nossa bancada virtual, volte ao Tinkercad e execute a verificação final:
+        </p>
+
+        <ol class="space-y-3 text-sm text-slate-300 list-decimal list-inside bg-slate-900 p-5 rounded-2xl border border-slate-800">
+          <li>Revise detalhadamente todas as conexões físicas da protoboard.</li>
+          <li>Clique no botão verde <strong>Iniciar simulação</strong> no canto superior direito.</li>
+          <li>Aguarde o carregamento do ambiente virtual.</li>
+          <li>Clique sobre o botão do Tinkercad para mantê-lo pressionado e observe o acendimento do LED.</li>
+          <li>Solte o clique do mouse e confirme se o LED apaga imediatamente.</li>
+        </ol>
+      </section>
+
+      <!-- SEÇÃO 9: ETAPA 7 - DESAFIOS DE PROGRAMAÇÃO -->
+      <section id="sec-9" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            9
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 7 — Modificando o projeto (Desafios)</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
+        </p>
+
+        <!-- Abas de Desafios Interativas -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
+          <div class="flex border-b border-slate-800 bg-slate-950 overflow-x-auto">
+            <button data-challenge-tab="c1" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-teal-400 text-teal-300 bg-slate-900">
+              Desafio 1: Inverter Lógica
+            </button>
+            <button data-challenge-tab="c2" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white">
+              Desafio 2: Temporizador Delay
+            </button>
+            <button data-challenge-tab="c3" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white">
+              Desafio 3: Sinalizador Pisca 3x
+            </button>
+          </div>
+
+          <div class="p-6 space-y-4">
+            <!-- Conteúdo Desafio 1 -->
+            <div id="c1-content" class="challenge-content space-y-3">
+              <h3 class="text-lg font-bold text-white">Desafio 1 — Inverter o comportamento do LED</h3>
+              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED permanecer aceso quando o botão estiver solto e apagar quando for pressionado.</p>
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+                <span class="text-slate-500">// Alteração na instrução condicional no loop():</span><br>
+                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">LOW</span>) { <span class="text-slate-500">// Se botão estiver solto</span><br>
+                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Liga LED</span><br>
+                } <span class="text-purple-400">else</span> {<br>
+                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Desliga LED</span><br>
+                }
+              </div>
+              <button onclick="switchSimMode('inverted')" class="px-3.5 py-2 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-bold hover:bg-teal-500/30 transition-all">
+                <i class="fa-solid fa-play"></i> Testar esta lógica no Simulador
+              </button>
+            </div>
+
+            <!-- Conteúdo Desafio 2 -->
+            <div id="c2-content" class="challenge-content hidden space-y-3">
+              <h3 class="text-lg font-bold text-white">Desafio 2 — Alterar o tempo de acionamento (Delay)</h3>
+              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Manter o LED aceso por 2 segundos (2000 ms) após o clique no botão.</p>
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+                &nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">2000</span>); <span class="text-slate-500">// Mantém aceso por 2 segundos</span><br>
+                } <span class="text-purple-400">else</span> {<br>
+                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+                }
+              </div>
+              <button onclick="switchSimMode('delay')" class="px-3.5 py-2 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-bold hover:bg-teal-500/30 transition-all">
+                <i class="fa-solid fa-play"></i> Testar temporizador no Simulador
+              </button>
+            </div>
+
+            <!-- Conteúdo Desafio 3 -->
+            <div id="c3-content" class="challenge-content hidden space-y-3">
+              <h3 class="text-lg font-bold text-white">Desafio 3 — Criar um sinalizador luminoso (Laço for)</h3>
+              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED piscar 3 vezes seguidas ao pressionar o botão.</p>
+              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+                &nbsp;&nbsp;<span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = 0; i &lt; 3; i++) {<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+                &nbsp;&nbsp;}<br>
+                }
+              </div>
+              <button onclick="switchSimMode('blink3')" class="px-3.5 py-2 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-bold hover:bg-teal-500/30 transition-all">
+                <i class="fa-solid fa-play"></i> Testar Pisca-Pisca no Simulador
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 10: ETAPA 8 - INVESTIGANDO ERROS (TROUBLESHOOTING MATRIX) -->
+      <section id="sec-10" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            10
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 8 — Investigando erros (Troubleshooting)</h2>
+        </div>
+
+        <p class="text-slate-300">
+          O circuito não funcionou como esperado? Não se preocupe! Clique nos sintomas abaixo para descobrir como diagnosticar e resolver o problema:
+        </p>
+
+        <!-- Matriz Clicável de Erros -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="troubleGrid">
+          
+          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-red-400 text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-circle-xmark"></i>
+                <span>Sintoma: O LED nunca acende</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
+            </div>
+            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
+              <p><strong>O que investigar:</strong></p>
+              <ul class="list-disc list-inside space-y-1 text-slate-400">
+                <li>Verifique se a polaridade do LED está invertida (Ânodo no pino 8, Cátodo no GND).</li>
+                <li>Confirme se o resistor de 220 Ω está conectado em série no mesmo trilho do LED.</li>
+                <li>Certifique-se de que os números dos pinos no código correspondem à fiação física.</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-amber-400 text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-circle-exclamation"></i>
+                <span>Sintoma: O LED fica sempre aceso</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
+            </div>
+            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
+              <p><strong>O que investigar:</strong></p>
+              <ul class="list-disc list-inside space-y-1 text-slate-400">
+                <li>Verifique se o resistor de 10 kΩ (Pull-down) está desconectado do GND.</li>
+                <li>Confirme se as pernas do botão não estão em curto na protoboard.</li>
+                <li>Verifique a condição no <code class="text-teal-300">if</code> (HIGH vs LOW).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-purple-400 text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-bolt"></i>
+                <span>Sintoma: LED acende sem apertar nada</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
+            </div>
+            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
+              <p><strong>O que investigar:</strong></p>
+              <ul class="list-disc list-inside space-y-1 text-slate-400">
+                <li>Ausência do resistor de Pull-down deixando o pino de entrada "flutuando" (sensível a ruído estático).</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="font-bold text-blue-400 text-sm flex items-center space-x-2">
+                <i class="fa-solid fa-toggle-off"></i>
+                <span>Sintoma: O botão não gera efeito</span>
+              </span>
+              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
+            </div>
+            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
+              <p><strong>O que investigar:</strong></p>
+              <ul class="list-disc list-inside space-y-1 text-slate-400">
+                <li>Verifique se você esqueceu de clicar em "Iniciar Simulação" no topo do Tinkercad.</li>
+                <li>Verifique se usou os dois pinos certos do terminal do botão de 4 pernas.</li>
+              </ul>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- SEÇÃO 11: ETAPA 9 - DESAFIO FINAL DE AUTOMATIZAÇÃO -->
+      <section id="sec-11" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            11
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 9 — Desafio final: crie sua própria automação</h2>
+        </div>
+
+        <p class="text-slate-300">
+          A escola precisa de um sistema de sinalização luminosa para indicar quando um equipamento pode ser utilizado. Escolha uma das três propostas abaixo e implemente:
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">Opção A</span>
+              <h3 class="font-bold text-white text-base">Indicador Simples</h3>
+              <p class="text-xs text-slate-300">O LED acende quando o botão permanece pressionado e apaga instantaneamente ao soltar.</p>
+            </div>
+            <span class="text-[10px] text-teal-400 font-mono font-semibold">Nível: Iniciante</span>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold">Opção B</span>
+              <h3 class="font-bold text-white text-base">Sinalizador de Alerta</h3>
+              <p class="text-xs text-slate-300">Ao pressionar o botão uma vez, o LED pisca 3 vezes seguidas como um aviso luminoso de emergência.</p>
+            </div>
+            <span class="text-[10px] text-amber-400 font-mono font-semibold">Nível: Intermediário</span>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
+            <div class="space-y-2">
+              <span class="px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold">Opção C</span>
+              <h3 class="font-bold text-white text-base">Indicador de Autorização (Toggle)</h3>
+              <p class="text-xs text-slate-300">O 1º toque no botão liga o LED e ele continua aceso. O 2º toque apaga o LED (Chave Liga/Desliga).</p>
+            </div>
+            <span class="text-[10px] text-purple-400 font-mono font-semibold">Nível: Avançado</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 12: ETAPA 10 - RELATÓRIO DE DESENVOLVIMENTO (INTERATIVO COM IMPRESSÃO) -->
+      <section id="sec-12" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            12
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 10 — Registrando os resultados</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Preencha o formulário do relatório abaixo. Suas respostas são salvas automaticamente no navegador. Ao finalizar, você pode imprimir ou salvar em PDF!
+        </p>
+
+        <form id="printable-report" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
+          <div class="border-b border-slate-800 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h3 class="text-xl font-bold text-white">Relatório de Desenvolvimento Prático</h3>
+              <p class="text-xs text-slate-400">Arduino Uno - Entradas, Saídas e Automação com LED</p>
+            </div>
+            <div class="flex items-center space-x-3 no-print">
+              <button type="button" id="clearReportBtn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-xl transition-all">
+                Limpar Form
+              </button>
+              <button type="button" id="printReportBtn" class="px-4 py-2 bg-arduino hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center space-x-2">
+                <i class="fa-solid fa-print"></i>
+                <span>Exportar / Imprimir PDF</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">1. Nome do Aluno / Dupla:</label>
+              <input type="text" id="rep_q1" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: Maria Silva e João Santos">
+            </div>
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">2. Nome do Projeto:</label>
+              <input type="text" id="rep_q2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" value="Projeto 01 - Controle de LED com Botão">
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">3. Qual problema o circuito procura resolver?</label>
+              <textarea id="rep_q3" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Escreva a resposta..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">4. Qual componente foi utilizado como ENTRADA?</label>
+                <input type="text" id="rep_q4" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: Botão de pressão">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">5. Qual componente foi utilizado como SAÍDA?</label>
+                <input type="text" id="rep_q5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: LED difuso vermelho">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">6. Explique o que acontece eletricamente e no código quando o botão é pressionado:</label>
+              <textarea id="rep_q6" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Descreva o fluxo de sinal do pino 2 ao pino 8..."></textarea>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">7. Qual a função do resistor de 220 Ω no LED?</label>
+                <input type="text" id="rep_q7" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Proteger contra superexposição de corrente...">
+              </div>
+              <div>
+                <label class="block text-xs font-semibold text-slate-300 mb-1">8. Qual a função do resistor de 10 kΩ (Pull-down)?</label>
+                <input type="text" id="rep_q8" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Estabilizar o sinal em nível LOW em repouso...">
+              </div>
+            </div>
+
+            <div>
+              <label class="block text-xs font-semibold text-slate-300 mb-1">9. Qual foi o principal erro encontrado durante a montagem/programação e como corrigiram?</label>
+              <textarea id="rep_q9" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Relate as dificuldades e soluções..."></textarea>
+            </div>
+          </div>
+        </form>
+      </section>
+
+      <!-- SEÇÃO 13: CHECKLIST DE APRENDIZAGEM (INTERATIVO COM MEDIDOR) -->
+      <section id="sec-13" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            13
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 11 — Checklist de aprendizagem</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Marque as caixas à medida que concluir cada habilidade prática:
+        </p>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+            <span class="text-sm font-bold text-white">Meta de Aprendizagem</span>
+            <span id="checklistCounter" class="text-xs font-bold text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/30">0 de 10 Concluídos</span>
+          </div>
+
+          <div id="checklistContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs md:text-sm">
+            <!-- Gerado via JavaScript -->
+          </div>
+        </div>
+      </section>
+
+      <!-- SEÇÃO 14: AUTOAVALIAÇÃO COM CÁLCULO DE NÍVEL -->
+      <section id="sec-14" class="scroll-mt-24 space-y-6 mb-24">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            14
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 12 — Autoavaliação</h2>
+        </div>
+
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
+          <p class="text-slate-300 text-sm">Responda com sinceridade para calcular seu nível de domínio:</p>
+
+          <div class="space-y-6" id="selfQuiz">
+            
+            <!-- Pergunta 1 -->
+            <div class="space-y-2">
+              <p class="text-sm font-bold text-white">1. Consigo explicar a diferença entre um dispositivo de entrada e de saída?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq1" value="3" class="text-teal-400">
+                  <span>Sim, consigo explicar e dar exemplos.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq1" value="2" class="text-teal-400">
+                  <span>Compreendi, mas tenho algumas dúvidas.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq1" value="1" class="text-teal-400">
+                  <span>Preciso revisar esse conteúdo.</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Pergunta 2 -->
+            <div class="space-y-2">
+              <p class="text-sm font-bold text-white">2. Consigo explicar como o Arduino lê o botão e decide acionar o LED?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq2" value="3" class="text-teal-400">
+                  <span>Sim, consigo explicar todo o fluxo.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq2" value="2" class="text-teal-400">
+                  <span>Compreendi parcialmente.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq2" value="1" class="text-teal-400">
+                  <span>Ainda preciso de ajuda.</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Pergunta 3 -->
+            <div class="space-y-2">
+              <p class="text-sm font-bold text-white">3. Consigo modificar o código sem apenas copiar exemplos?</p>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq3" value="3" class="text-teal-400">
+                  <span>Sim, realizo e testo alterações solo.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq3" value="2" class="text-teal-400">
+                  <span>Faço alterações com orientação.</span>
+                </label>
+                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
+                  <input type="radio" name="sq3" value="1" class="text-teal-400">
+                  <span>Preciso de ajuda para alterar código.</span>
+                </label>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Resultado do Quiz -->
+          <div id="quizScoreBox" class="hidden p-4 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-between">
+            <div>
+              <span class="text-xs uppercase font-bold text-teal-400 block">Seu Nível de Domínio:</span>
+              <span id="quizBadge" class="text-lg font-extrabold text-white">Mestre dos Circuitos 🚀</span>
+            </div>
+            <div id="quizPercent" class="text-2xl font-black text-teal-300">100%</div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- TOAST NOTIFICATION -->
+  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-teal-500 text-slate-950 font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
+    <i class="fa-solid fa-check-circle text-lg"></i>
+    <span id="toastMsg">Código copiado com sucesso!</span>
+  </div>
+
+  <!-- JAVASCRIPT LÓGICA COMPLETA -->
+  <script>
+    // --- ESTADO GLOBAL DA APLICAÇÃO ---
+    const appState = {
+      simMode: 'standard', // standard, inverted, delay, blink3
+      isButtonPressed: false,
+      ledState: false,
+      delayTimer: null,
+      checklist: new Array(10).fill(false)
+    };
+
+    // --- LISTA DO CHECKLIST ---
+    const checklistItems = [
+      "Acessei o Tinkercad e criei o circuito",
+      "Identifiquei os componentes eletrônicos",
+      "Diferenciei entrada, processamento e saída",
+      "Conectei o botão ao Arduino com resistor Pull-down",
+      "Conectei o LED com o resistor de 220 Ω",
+      "Escrevi o algoritmo em português antes de programar",
+      "Utilizei pinMode() para configurar pinos de E/S",
+      "Utilizei digitalRead() para ler o estado do botão",
+      "Utilizei digitalWrite() e a condição if/else",
+      "Executei a simulação e modifiquei o código nos desafios"
+    ];
+
+    // --- INICIALIZAÇÃO NA CARGA DA PÁGINA ---
+    document.addEventListener('DOMContentLoaded', () => {
+      initNavigation();
+      initSimulators();
+      initTroubleshooting();
+      initCodeTabs();
+      initChecklist();
+      initReportAutosave();
+      initQuiz();
+    });
+
+    // --- NAVEGAÇÃO E SIDEBAR ---
+    function initNavigation() {
+      const toggleBtn = document.getElementById('toggleSidebar');
+      const sidebar = document.getElementById('sidebar');
+      const overlay = document.getElementById('sidebarOverlay');
+
+      function toggleMenu() {
+        sidebar.classList.toggle('-translate-x-full');
+        overlay.classList.toggle('hidden');
+      }
+
+      toggleBtn?.addEventListener('click', toggleMenu);
+      overlay?.addEventListener('click', toggleMenu);
+
+      // Atualiza progresso de leitura no scroll
+      window.addEventListener('scroll', updateReadingProgress);
+    }
+
+    function updateReadingProgress() {
+      const winScroll = document.documentElement.scrollTop;
+      const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const scrolled = Math.min(100, Math.round((winScroll / height) * 100));
+
+      document.getElementById('globalProgressPercent').innerText = scrolled + '%';
+      document.getElementById('globalProgressBar').style.width = scrolled + '%';
+    }
+
+    // --- SIMULADOR DE CIRCUITO VIVO (TEST BENCH) ---
+    function initSimulators() {
+      const physBtn = document.getElementById('simPhysicalBtn');
+      const svgBtn = document.getElementById('svgButtonCap');
+      const modeBtns = document.querySelectorAll('.sim-mode-btn');
+
+      // Suporte para pressionar e segurar botão
+      const startPress = (e) => {
+        e.preventDefault();
+        if (appState.isButtonPressed) return;
+        appState.isButtonPressed = true;
+        updateSimState();
+      };
+
+      const endPress = (e) => {
+        e.preventDefault();
+        if (!appState.isButtonPressed) return;
+        appState.isButtonPressed = false;
+        updateSimState();
+      };
+
+      // Listeners Botão Físico
+      physBtn?.addEventListener('mousedown', startPress);
+      physBtn?.addEventListener('mouseup', endPress);
+      physBtn?.addEventListener('mouseleave', endPress);
+      physBtn?.addEventListener('touchstart', startPress);
+      physBtn?.addEventListener('touchend', endPress);
+
+      // Listeners SVG Botão
+      svgBtn?.addEventListener('mousedown', startPress);
+      svgBtn?.addEventListener('mouseup', endPress);
+
+      // Tecla Espaço no Teclado
+      window.addEventListener('keydown', (e) => {
+        if (e.code === 'Space' && e.target === document.body) {
+          e.preventDefault();
+          startPress(e);
+        }
+      });
+      window.addEventListener('keyup', (e) => {
+        if (e.code === 'Space') {
+          endPress(e);
+        }
+      });
+
+      // Botões de Mudança de Modo do Simulador
+      modeBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const mode = btn.getAttribute('data-sim-mode');
+          switchSimMode(mode);
+        });
+      });
+    }
+
+    function switchSimMode(mode) {
+      appState.simMode = mode;
+      document.querySelectorAll('.sim-mode-btn').forEach(b => {
+        if (b.getAttribute('data-sim-mode') === mode) {
+          b.className = 'sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-teal-500 text-slate-950 shadow-md transition-all';
+        } else {
+          b.className = 'sim-mode-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
+        }
+      });
+
+      logTerminal(`[MODO] Lógica alterada para: ${mode.toUpperCase()}`);
+      updateSimState();
+    }
+
+    function updateSimState() {
+      const isPressed = appState.isButtonPressed;
+      const svgCap = document.getElementById('svgButtonCap');
+      const wirePin2 = document.getElementById('wirePin2');
+      const wirePin8 = document.getElementById('wirePin8');
+      const badgePin2 = document.getElementById('badgePin2');
+      const valPin2 = document.getElementById('valPin2');
+
+      // Animação visual do botão pressionado
+      if (isPressed) {
+        svgCap?.setAttribute('transform', 'translate(0, 3)');
+        svgCap?.setAttribute('fill', '#1d4ed8');
+        wirePin2?.setAttribute('stroke', '#22c55e');
+        badgePin2?.className = 'w-3 h-3 rounded-full bg-emerald-500 animate-pulse';
+        valPin2.innerText = '5V (HIGH)';
+        valPin2.className = 'text-xs font-mono font-bold text-emerald-400';
+      } else {
+        svgCap?.setAttribute('transform', 'translate(0, 0)');
+        svgCap?.setAttribute('fill', '#2563eb');
+        wirePin2?.setAttribute('stroke', '#64748b');
+        badgePin2?.className = 'w-3 h-3 rounded-full bg-slate-600';
+        valPin2.innerText = '0V (LOW)';
+        valPin2.className = 'text-xs font-mono font-bold text-slate-400';
+      }
+
+      // Execução da Lógica Arduino conforme o modo ativo
+      if (appState.simMode === 'standard') {
+        setLedState(isPressed);
+      } else if (appState.simMode === 'inverted') {
+        setLedState(!isPressed);
+      } else if (appState.simMode === 'delay') {
+        if (isPressed) {
+          setLedState(true);
+          if (appState.delayTimer) clearTimeout(appState.delayTimer);
+        } else if (appState.ledState) {
+          logTerminal('[DELAY] Botão solto! Mantendo LED ligado por 2 segundos...');
+          appState.delayTimer = setTimeout(() => {
+            setLedState(false);
+            logTerminal('[DELAY] Tempo esgotado. LED apagado.');
+          }, 2000);
+        }
+      } else if (appState.simMode === 'blink3') {
+        if (isPressed && !appState.ledState) {
+          runBlinkSequence();
+        }
+      }
+    }
+
+    function setLedState(turnOn) {
+      appState.ledState = turnOn;
+      const svgBulb = document.getElementById('svgLedBulb');
+      const wirePin8 = document.getElementById('wirePin8');
+      const badgePin8 = document.getElementById('badgePin8');
+      const valPin8 = document.getElementById('valPin8');
+      const statusBadge = document.getElementById('ledStatusBadge');
+
+      if (turnOn) {
+        svgBulb?.classList.add('led-glow-on');
+        wirePin8?.setAttribute('stroke', '#ef4444');
+        badgePin8?.className = 'w-3 h-3 rounded-full bg-red-500 animate-pulse';
+        valPin8.innerText = '5V (HIGH)';
+        valPin8.className = 'text-xs font-mono font-bold text-red-400';
+        statusBadge.innerText = 'ACESO 💡';
+        statusBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-red-500/20 text-red-400 border border-red-500/30';
+      } else {
+        svgBulb?.classList.remove('led-glow-on');
+        wirePin8?.setAttribute('stroke', '#64748b');
+        badgePin8?.className = 'w-3 h-3 rounded-full bg-slate-600';
+        valPin8.innerText = '0V (LOW)';
+        valPin8.className = 'text-xs font-mono font-bold text-slate-400';
+        statusBadge.innerText = 'APAGADO';
+        statusBadge.className = 'px-2.5 py-1 rounded-full text-xs font-bold bg-slate-800 text-slate-500';
+      }
+    }
+
+    function runBlinkSequence() {
+      logTerminal('[PISCA 3X] Iniciando sequência de 3 piscadas...');
+      let count = 0;
+      const interval = setInterval(() => {
+        setLedState(!appState.ledState);
+        count++;
+        if (count >= 6) {
+          clearInterval(interval);
+          setLedState(false);
+          logTerminal('[PISCA 3X] Sequência concluída.');
+        }
+      }, 300);
+    }
+
+    function logTerminal(msg) {
+      const term = document.getElementById('simTerminalLog');
+      if (!term) return;
+      const line = document.createElement('div');
+      line.innerText = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    // --- CÓDIGO E ABAS DOS DESAFIOS ---
+    function initCodeTabs() {
+      const copyBtn = document.getElementById('copyCodeBtn');
+      copyBtn?.addEventListener('click', () => {
+        const codeText = `// PROJETO: CONTROLE DE LED COM BOTÃO
+int botao = 2;
+int led = 8;
+
+void setup() {
+  pinMode(botao, INPUT);
+  pinMode(led, OUTPUT);
+}
+
+void loop() {
+  int estadoBotao = digitalRead(botao);
+  if (estadoBotao == HIGH) {
+    digitalWrite(led, HIGH);
+  } else {
+    digitalWrite(led, LOW);
+  }
+}`;
+        navigator.clipboard.writeText(codeText).then(() => {
+          showToast('Código copiado para a área de transferência!');
+        });
+      });
+
+      // Alternador de Abas de Desafio
+      const tabBtns = document.querySelectorAll('.challenge-tab-btn');
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          const target = btn.getAttribute('data-challenge-tab');
+          tabBtns.forEach(b => {
+            b.className = 'challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white';
+          });
+          btn.className = 'challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-teal-400 text-teal-300 bg-slate-900';
+
+          document.querySelectorAll('.challenge-content').forEach(c => c.classList.add('hidden'));
+          document.getElementById(`${target}-content`)?.classList.remove('hidden');
+        });
+      });
+    }
+
+    // --- MATRIZ DE TROUBLESHOOTING ---
+    function initTroubleshooting() {
+      const cards = document.querySelectorAll('.trouble-card');
+      cards.forEach(card => {
+        card.addEventListener('click', () => {
+          const details = card.querySelector('.trouble-details');
+          const chevron = card.querySelector('.chevron');
+          details?.classList.toggle('hidden');
+          chevron?.classList.toggle('rotate-180');
+        });
+      });
+    }
+
+    // --- CHECKLIST DE APRENDIZAGEM ---
+    function initChecklist() {
+      const container = document.getElementById('checklistContainer');
+      if (!container) return;
+
+      const saved = JSON.parse(localStorage.getItem('arduinoChecklist') || '[]');
+
+      checklistItems.forEach((item, index) => {
+        const isChecked = saved[index] || false;
+        appState.checklist[index] = isChecked;
+
+        const label = document.createElement('label');
+        label.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center space-x-3 select-none ${isChecked ? 'bg-teal-500/10 border-teal-500/40 text-teal-200' : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'}`;
+        label.innerHTML = `
+          <input type="checkbox" data-index="${index}" ${isChecked ? 'checked' : ''} class="w-4 h-4 text-teal-500 rounded focus:ring-0">
+          <span>${item}</span>
+        `;
+
+        label.querySelector('input')?.addEventListener('change', (e) => {
+          const checked = e.target.checked;
+          appState.checklist[index] = checked;
+          localStorage.setItem('arduinoChecklist', JSON.stringify(appState.checklist));
+          label.className = `p-3 rounded-xl border transition-all cursor-pointer flex items-center space-x-3 select-none ${checked ? 'bg-teal-500/10 border-teal-500/40 text-teal-200' : 'bg-slate-950 border-slate-800 text-slate-300 hover:border-slate-700'}`;
+          updateChecklistCounter();
+        });
+
+        container.appendChild(label);
+      });
+
+      updateChecklistCounter();
+    }
+
+    function updateChecklistCounter() {
+      const completed = appState.checklist.filter(Boolean).length;
+      const counter = document.getElementById('checklistCounter');
+      if (counter) counter.innerText = `${completed} de ${checklistItems.length} Concluídos`;
+    }
+
+    // --- AUTOSAVE DO RELATÓRIO E IMPRESSÃO ---
+    function initReportAutosave() {
+      const form = document.getElementById('printable-report');
+      const inputs = form?.querySelectorAll('input, textarea');
+
+      // Restaura dados do localStorage
+      inputs?.forEach(input => {
+        const savedVal = localStorage.getItem(`rep_${input.id}`);
+        if (savedVal && !input.value) input.value = savedVal;
+
+        input.addEventListener('input', () => {
+          localStorage.setItem(`rep_${input.id}`, input.value);
+        });
+      });
+
+      document.getElementById('printReportBtn')?.addEventListener('click', () => {
+        window.print();
+      });
+
+      document.getElementById('clearReportBtn')?.addEventListener('click', () => {
+        if (confirm('Tem certeza que deseja limpar as respostas do relatório?')) {
+          inputs?.forEach(i => {
+            i.value = '';
+            localStorage.removeItem(`rep_${i.id}`);
+          });
+        }
+      });
+    }
+
+    // --- AUTOAVALIAÇÃO QUIZ ---
+    function initQuiz() {
+      const radios = document.querySelectorAll('#selfQuiz input[type="radio"]');
+      radios.forEach(r => {
+        r.addEventListener('change', calculateQuiz);
+      });
+    }
+
+    function calculateQuiz() {
+      const q1 = document.querySelector('input[name="sq1"]:checked')?.value;
+      const q2 = document.querySelector('input[name="sq2"]:checked')?.value;
+      const q3 = document.querySelector('input[name="sq3"]:checked')?.value;
+
+      if (q1 && q2 && q3) {
+        const total = parseInt(q1) + parseInt(q2) + parseInt(q3);
+        const maxScore = 9;
+        const percent = Math.round((total / maxScore) * 100);
+
+        const scoreBox = document.getElementById('quizScoreBox');
+        const badge = document.getElementById('quizBadge');
+        const percentEl = document.getElementById('quizPercent');
+
+        scoreBox?.classList.remove('hidden');
+        percentEl.innerText = `${percent}%`;
+
+        if (percent >= 85) {
+          badge.innerText = 'Especialista em Automação Arduino 🚀';
+        } else if (percent >= 60) {
+          badge.innerText = 'Desenvolvedor em Progresso 💡';
+        } else {
+          badge.innerText = 'Aprendiz de Eletrônica 🛠️';
+        }
+      }
+    }
+
+    // UTILS: TOAST
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      const toastMsg = document.getElementById('toastMsg');
+      if (toast && toastMsg) {
+        toastMsg.innerText = msg;
+        toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+        setTimeout(() => {
+          toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+        }, 3000);
+      }
+    }
+  </script>
+</body>
+</html>
