@@ -706,7 +706,7 @@
         </div>
 
         <p class="text-slate-300">
-          Abaixo está o código C++ completo para ser inserido no Tinkercad (Modo Texto). Você pode copiar este código com um clique!
+          Abaixo está o código C++ completo para ser inserido no Arduino IDE. Você pode copiar este código com um clique!
         </p>
 
         <!-- Bloco de Código com Sintaxe e Botão Copiar -->
@@ -774,7 +774,6 @@
       </section>
 
 
-      <!-- SEÇÃO 9: ETAPA  - DESAFIOS DE PROGRAMAÇÃO -->
       <!-- SEÇÃO 9: ETAPA - DESAFIOS DE PROGRAMAÇÃO -->
 <section id="sec-9" class="scroll-mt-24 space-y-6">
   <div class="flex items-center space-x-3">
@@ -848,6 +847,80 @@
 
   </div>
 </section>
+
+  <!-- SEÇÃO 7: ETAPA 5 - PROGRAMANDO -->
+      <section id="sec-7" class="scroll-mt-24 space-y-6">
+        <div class="flex items-center space-x-3">
+          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            7
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Acionando o Buzzer Piezo</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Abaixo está o código C++ completo para ser inserido no Arduino IDE. Você pode copiar este código com um clique!
+        </p>
+
+        <!-- Bloco de Código com Sintaxe e Botão Copiar -->
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+          <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
+            <div class="flex items-center space-x-2">
+              <span class="w-3 h-3 rounded-full bg-red-500"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="text-xs font-mono text-slate-400 ml-2">controle_led_botao.ino</span>
+            </div>
+            <button id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2">
+              <i class="fa-regular fa-copy"></i>
+              <span>Copiar Código</span>
+            </button>
+          </div>
+
+
+          <img src="tone.png" alt="Diagrama do circuito Arduino com LED e botão">
+
+          <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: CONTROLE DE LED COM BOTÃO - CÓDIGO BASE</span>
+
+<p><span style="color: #728e00;">#include</span><span style="color: #005c5f;">"pitches.h"</span></p>
+<br>
+<p style="color: #95a5a6;">// notes in the melody:</p>
+<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> melody[] = </span><span style="color: #434f54;">{</span></p>
+<p><span style="color: #4e5b61;"> NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, </span><span style="color: #005c5f;">0</span><span style="color: #4e5b61;">, NOTE_B3, NOTE_C4</span></p>
+<p><span style="color: #434f54;">}</span><span style="color: #4e5b61;">;</span></p>
+<br>
+<p style="color: #95a5a6;">// note durations: 4 = quarter note, 8 = eighth note, etc.:</p>
+<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> noteDurations[] = </span><span style="color: #434f54;">{</span></p>
+<p><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span></p>
+<p><span style="color: #434f54;">}</span><span style="color: #4e5b61;">;</span></p>
+<br>
+<p><span style="color: #00979d;">void</span><span style="color: #d35400;">setup</span><span style="color: #434f54;">(){</span></p>
+<p style="color: #95a5a6;">// iterate over the notes of the melody:</p>
+<p><span style="color: #728e00;">for</span><span style="color: #434f54;">(</span><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> thisNote = </span><span style="color: #005c5f;">0</span><span style="color: #4e5b61;">; thisNote &lt; </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">; thisNote++</span><span style="color: #434f54;">){</span></p>
+<br>
+<p style="color: #95a5a6;">// to calculate the note duration, take one second divided by the note type.</p>
+<p style="color: #95a5a6;">//e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.</p>
+<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> noteDuration = </span><span style="color: #005c5f;">1000</span><span style="color: #4e5b61;"> / </span><span style="color: #d35400;">noteDurations</span><span style="color: #4e5b61;">[thisNote];</span></p>
+<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #d35400;">melody</span><span style="color: #4e5b61;">[thisNote], noteDuration</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
+<br>
+<p style="color: #95a5a6;">// to distinguish the notes, set a minimum time between them.</p>
+<p style="color: #95a5a6;">// the note's duration + 30% seems to work well:</p>
+<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> pauseBetweenNotes = noteDuration * </span><span style="color: #005c5f;">1.30</span><span style="color: #4e5b61;">;</span></p>
+<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pauseBetweenNotes</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
+<p style="color: #95a5a6;">// stop the tone playing:</p>
+<p><span style="color: #d35400;">noTone</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">8</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
+<p style="color: #434f54;">}</p>
+<p style="color: #434f54;">}</p>
+<br>
+<p><span style="color: #00979d;">void</span><span style="color: #d35400;">loop</span><span style="color: #434f54;">(){</span></p>
+<p style="color: #95a5a6;">// no need to repeat the melody.</p>
+<p style="color: #434f54;">}</p>
+</code></pre>
+        </div>
+
+
+      </section>
+
+
 
       <!-- SEÇÃO 10: ETAPA 8 - INVESTIGANDO ERROS (TROUBLESHOOTING MATRIX) -->
       <!--<section id="sec-10" class="scroll-mt-24 space-y-6">
@@ -1544,5 +1617,5 @@
       }
     }
   </script>
-</body>
+  </body>
 </html>
