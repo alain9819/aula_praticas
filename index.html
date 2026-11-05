@@ -702,7 +702,7 @@
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             7
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 5 — Programando o Arduino</h2>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 5 — Acionando o LED com botão</h2>
         </div>
 
         <p class="text-slate-300">
@@ -724,11 +724,16 @@
             </button>
           </div>
 
+
+          <img src="LED.png" alt="Diagrama do circuito Arduino com LED e botão">
+
+          <img src="botao.png" alt="Diagrama do circuito Arduino com LED e botão">
+
           <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: CONTROLE DE LED COM BOTÃO - CÓDIGO BASE</span>
 
 <span class="text-slate-500">// Definição dos pinos</span>
 <span class="text-purple-400">int</span> botao = <span class="text-amber-300">2</span>;
-<span class="text-purple-400">int</span> led = <span class="text-amber-300">8</span>;
+<span class="text-purple-400">int</span> led = <span class="text-amber-300">13</span>;
 
 <span class="text-purple-400">void</span> <span class="text-blue-400">setup</span>() {
   <span class="text-slate-500">// Configura o pino do botão como entrada</span>
@@ -755,7 +760,7 @@
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
           <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
             <h4 class="font-bold text-teal-300">1. Variáveis de Pino</h4>
-            <p class="text-slate-400">Criamos <code class="text-amber-300">int botao = 2;</code> e <code class="text-amber-300">led = 8;</code> para que possamos trocar portas facilmente em um só lugar caso o circuito mude.</p>
+            <p class="text-slate-400">Criamos <code class="text-amber-300">int botao = 2;</code> e <code class="text-amber-300">led = 13;</code> para que possamos trocar portas facilmente em um só lugar caso o circuito mude.</p>
           </div>
           <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
             <h4 class="font-bold text-teal-300">2. Função setup()</h4>
@@ -768,112 +773,84 @@
         </div>
       </section>
 
-      <!-- SEÇÃO 8: ETAPA 6 - EXECUÇÃO NA PRÁTICA -->
-      <section id="sec-8" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            8
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Executando a simulação no Tinkercad</h2>
-        </div>
 
-        <p class="text-slate-300">
-          Após testar em nossa bancada virtual, volte ao Tinkercad e execute a verificação final:
-        </p>
+      <!-- SEÇÃO 9: ETAPA  - DESAFIOS DE PROGRAMAÇÃO -->
+      <!-- SEÇÃO 9: ETAPA - DESAFIOS DE PROGRAMAÇÃO -->
+<section id="sec-9" class="scroll-mt-24 space-y-6">
+  <div class="flex items-center space-x-3">
+    <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+      9
+    </div>
+    <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 7 — Modificando o projeto (Desafios)</h2>
+  </div>
 
-        <ol class="space-y-3 text-sm text-slate-300 list-decimal list-inside bg-slate-900 p-5 rounded-2xl border border-slate-800">
-          <li>Revise detalhadamente todas as conexões físicas da protoboard.</li>
-          <li>Clique no botão verde <strong>Iniciar simulação</strong> no canto superior direito.</li>
-          <li>Aguarde o carregamento do ambiente virtual.</li>
-          <li>Clique sobre o botão do Tinkercad para mantê-lo pressionado e observe o acendimento do LED.</li>
-          <li>Solte o clique do mouse e confirme se o LED apaga imediatamente.</li>
-        </ol>
-      </section>
+  <p class="text-slate-300">
+    Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
+  </p>
 
-      <!-- SEÇÃO 9: ETAPA 7 - DESAFIOS DE PROGRAMAÇÃO -->
-      <section id="sec-9" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            9
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 7 — Modificando o projeto (Desafios)</h2>
-        </div>
+  <!-- Lista de Desafios Sequenciais -->
+  <div class="space-y-6">
+    
+    <!-- Desafio 1 -->
+    <div id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
+        <h3 class="text-lg font-bold text-white">Inverter o comportamento do LED</h3>
+      </div>
+      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED permanecer aceso quando o botão estiver solto e apagar quando for pressionado.</p>
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+        <span class="text-slate-500">// Alteração na instrução condicional no loop():</span><br>
+        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">LOW</span>) { <span class="text-slate-500">// Se botão estiver solto</span><br>
+        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Liga LED</span><br>
+        } <span class="text-purple-400">else</span> {<br>
+        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Desliga LED</span><br>
+        }
+      </div>
+    </div>
 
-        <p class="text-slate-300">
-          Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
-        </p>
+    <!-- Desafio 2 -->
+    <div id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
+        <h3 class="text-lg font-bold text-white">Alterar o tempo de acionamento (Delay)</h3>
+      </div>
+      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Manter o LED aceso por 2 segundos (2000 ms) após o clique no botão.</p>
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+        &nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">2000</span>); <span class="text-slate-500">// Mantém aceso por 2 segundos</span><br>
+        } <span class="text-purple-400">else</span> {<br>
+        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+        }
+      </div>
 
-        <!-- Abas de Desafios Interativas -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden">
-          <div class="flex border-b border-slate-800 bg-slate-950 overflow-x-auto">
-            <button data-challenge-tab="c1" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-teal-400 text-teal-300 bg-slate-900">
-              Desafio 1: Inverter Lógica
-            </button>
-            <button data-challenge-tab="c2" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white">
-              Desafio 2: Temporizador Delay
-            </button>
-            <button data-challenge-tab="c3" class="challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white">
-              Desafio 3: Sinalizador Pisca 3x
-            </button>
-          </div>
+    </div>
 
-          <div class="p-6 space-y-4">
-            <!-- Conteúdo Desafio 1 -->
-            <div id="c1-content" class="challenge-content space-y-3">
-              <h3 class="text-lg font-bold text-white">Desafio 1 — Inverter o comportamento do LED</h3>
-              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED permanecer aceso quando o botão estiver solto e apagar quando for pressionado.</p>
-              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-                <span class="text-slate-500">// Alteração na instrução condicional no loop():</span><br>
-                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">LOW</span>) { <span class="text-slate-500">// Se botão estiver solto</span><br>
-                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Liga LED</span><br>
-                } <span class="text-purple-400">else</span> {<br>
-                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Desliga LED</span><br>
-                }
-              </div>
+    <!-- Desafio 3 -->
+    <div id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
+        <h3 class="text-lg font-bold text-white">Criar um sinalizador luminoso (Laço for)</h3>
+      </div>
+      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED piscar 3 vezes seguidas ao pressionar o botão.</p>
+      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+        &nbsp;&nbsp;<span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = 0; i &lt; 3; i++) {<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+        &nbsp;&nbsp;}<br>
+        }
+      </div>
 
-            </div>
+    </div>
 
-            <!-- Conteúdo Desafio 2 -->
-            <div id="c2-content" class="challenge-content hidden space-y-3">
-              <h3 class="text-lg font-bold text-white">Desafio 2 — Alterar o tempo de acionamento (Delay)</h3>
-              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Manter o LED aceso por 2 segundos (2000 ms) após o clique no botão.</p>
-              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
-                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
-                &nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">2000</span>); <span class="text-slate-500">// Mantém aceso por 2 segundos</span><br>
-                } <span class="text-purple-400">else</span> {<br>
-                &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
-                }
-              </div>
-              <button onclick="switchSimMode('delay')" class="px-3.5 py-2 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-bold hover:bg-teal-500/30 transition-all">
-                <i class="fa-solid fa-play"></i> Testar temporizador no Simulador
-              </button>
-            </div>
-
-            <!-- Conteúdo Desafio 3 -->
-            <div id="c3-content" class="challenge-content hidden space-y-3">
-              <h3 class="text-lg font-bold text-white">Desafio 3 — Criar um sinalizador luminoso (Laço for)</h3>
-              <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED piscar 3 vezes seguidas ao pressionar o botão.</p>
-              <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-                <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
-                &nbsp;&nbsp;<span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = 0; i &lt; 3; i++) {<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
-                &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
-                &nbsp;&nbsp;}<br>
-                }
-              </div>
-              <button onclick="switchSimMode('blink3')" class="px-3.5 py-2 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-xl text-xs font-bold hover:bg-teal-500/30 transition-all">
-                <i class="fa-solid fa-play"></i> Testar Pisca-Pisca no Simulador
-              </button>
-            </div>
-          </div>
-        </div>
-      </section>
+  </div>
+</section>
 
       <!-- SEÇÃO 10: ETAPA 8 - INVESTIGANDO ERROS (TROUBLESHOOTING MATRIX) -->
-      <section id="sec-10" class="scroll-mt-24 space-y-6">
+      <!--<section id="sec-10" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             10
@@ -885,8 +862,8 @@
           O circuito não funcionou como esperado? Não se preocupe! Clique nos sintomas abaixo para descobrir como diagnosticar e resolver o problema:
         </p>
 
-        <!-- Matriz Clicável de Erros -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="troubleGrid">
+        // Matriz Clicável de Erros -->
+        <!--<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="troubleGrid">
           
           <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
             <div class="flex items-center justify-between">
@@ -960,8 +937,8 @@
         </div>
       </section>
 
-      <!-- SEÇÃO 11: ETAPA 9 - DESAFIO FINAL DE AUTOMATIZAÇÃO -->
-      <section id="sec-11" class="scroll-mt-24 space-y-6">
+      // SEÇÃO 11: ETAPA 9 - DESAFIO FINAL DE AUTOMATIZAÇÃO -->
+      <!--<section id="sec-11" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             11
@@ -1003,8 +980,8 @@
         </div>
       </section>
 
-      <!-- SEÇÃO 12: ETAPA 10 - RELATÓRIO DE DESENVOLVIMENTO (INTERATIVO COM IMPRESSÃO) -->
-      <section id="sec-12" class="scroll-mt-24 space-y-6">
+      // SEÇÃO 12: ETAPA 10 - RELATÓRIO DE DESENVOLVIMENTO (INTERATIVO COM IMPRESSÃO) -->
+      <!--<section id="sec-12" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             12
@@ -1085,8 +1062,8 @@
         </form>
       </section>
 
-      <!-- SEÇÃO 13: CHECKLIST DE APRENDIZAGEM (INTERATIVO COM MEDIDOR) -->
-      <!-- <section id="sec-13" class="scroll-mt-24 space-y-6">
+      // SEÇÃO 13: CHECKLIST DE APRENDIZAGEM (INTERATIVO COM MEDIDOR) -->
+       <!--<section id="sec-13" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             13
@@ -1192,19 +1169,21 @@
             <div id="quizPercent" class="text-2xl font-black text-teal-300">100%</div>
           </div>
         </div>
-      </section> -->
+      </section> 
 
     </main>
   </div>
 
-  <!-- TOAST NOTIFICATION -->
+  // TOAST NOTIFICATION 
   <div id="toast" class="fixed bottom-5 right-5 z-50 bg-teal-500 text-slate-950 font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
     <i class="fa-solid fa-check-circle text-lg"></i>
     <span id="toastMsg">Código copiado com sucesso!</span>
-  </div>
+  </div>  -->
 
   <!-- JAVASCRIPT LÓGICA COMPLETA -->
   <script>
+
+
     // --- ESTADO GLOBAL DA APLICAÇÃO ---
     const appState = {
       simMode: 'standard', // standard, inverted, delay, blink3
@@ -1359,28 +1338,6 @@
         valPin2.className = 'text-xs font-mono font-bold text-slate-400';
       }
 
-      // Execução da Lógica Arduino conforme o modo ativo
-      if (appState.simMode === 'standard') {
-        setLedState(isPressed);
-      } else if (appState.simMode === 'inverted') {
-        setLedState(!isPressed);
-      } else if (appState.simMode === 'delay') {
-        if (isPressed) {
-          setLedState(true);
-          if (appState.delayTimer) clearTimeout(appState.delayTimer);
-        } else if (appState.ledState) {
-          logTerminal('[DELAY] Botão solto! Mantendo LED ligado por 2 segundos...');
-          appState.delayTimer = setTimeout(() => {
-            setLedState(false);
-            logTerminal('[DELAY] Tempo esgotado. LED apagado.');
-          }, 2000);
-        }
-      } else if (appState.simMode === 'blink3') {
-        if (isPressed && !appState.ledState) {
-          runBlinkSequence();
-        }
-      }
-    }
 
     function setLedState(turnOn) {
       appState.ledState = turnOn;
@@ -1434,42 +1391,27 @@
 
     // --- CÓDIGO E ABAS DOS DESAFIOS ---
     function initCodeTabs() {
-      const copyBtn = document.getElementById('copyCodeBtn');
-      copyBtn?.addEventListener('click', () => {
-        const codeText = `// PROJETO: CONTROLE DE LED COM BOTÃO
-int botao = 2;
-int led = 8;
+      const tabButtons = document.querySelectorAll('.code-tab-btn');
+      const codeBlocks = document.querySelectorAll('.code-block');
 
-void setup() {
-  pinMode(botao, INPUT);
-  pinMode(led, OUTPUT);
-}
-
-void loop() {
-  int estadoBotao = digitalRead(botao);
-  if (estadoBotao == HIGH) {
-    digitalWrite(led, HIGH);
-  } else {
-    digitalWrite(led, LOW);
-  }
-}`;
-        navigator.clipboard.writeText(codeText).then(() => {
-          showToast('Código copiado para a área de transferência!');
-        });
-      });
-
-      // Alternador de Abas de Desafio
-      const tabBtns = document.querySelectorAll('.challenge-tab-btn');
-      tabBtns.forEach(btn => {
+      tabButtons.forEach(btn => {
         btn.addEventListener('click', () => {
-          const target = btn.getAttribute('data-challenge-tab');
-          tabBtns.forEach(b => {
-            b.className = 'challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-transparent text-slate-400 hover:text-white';
+          const target = btn.getAttribute('data-target');
+          codeBlocks.forEach(block => {
+            if (block.id === target) {
+              block.classList.remove('hidden');
+            } else {
+              block.classList.add('hidden');
+            }
           });
-          btn.className = 'challenge-tab-btn px-5 py-3 text-xs md:text-sm font-bold border-b-2 border-teal-400 text-teal-300 bg-slate-900';
 
-          document.querySelectorAll('.challenge-content').forEach(c => c.classList.add('hidden'));
-          document.getElementById(`${target}-content`)?.classList.remove('hidden');
+          tabButtons.forEach(b => {
+            if (b === btn) {
+              b.className = 'code-tab-btn px-3 py-2 rounded-xl text-xs font-semibold bg-teal-500 text-slate-950 shadow-md transition-all';
+            } else {
+              b.className = 'code-tab-btn px-3 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:bg-slate-700 transition-all';
+            }
+          });
         });
       });
     }
