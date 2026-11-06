@@ -858,7 +858,7 @@
         </div>
 
         <p class="text-slate-300">
-          Abaixo está o código C++ completo para ser inserido no Arduino IDE. Você pode copiar este código com um clique!
+          Abaixo está o código C++ completo para ser inserido no Arduino IDE.
         </p>
 
         <!-- Bloco de Código com Sintaxe e Botão Copiar -->
@@ -868,55 +868,159 @@
               <span class="w-3 h-3 rounded-full bg-red-500"></span>
               <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
               <span class="w-3 h-3 rounded-full bg-green-500"></span>
-              <span class="text-xs font-mono text-slate-400 ml-2">controle_led_botao.ino</span>
+              <span class="text-xs font-mono text-slate-400 ml-2">BUZZER.ino</span>
             </div>
             <button id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2">
               <i class="fa-regular fa-copy"></i>
-              <span>Copiar Código</span>
+              
             </button>
           </div>
 
 
           <img src="tone.png" alt="Diagrama do circuito Arduino com LED e botão">
 
-          <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: CONTROLE DE LED COM BOTÃO - CÓDIGO BASE</span>
-
-<p><span style="color: #728e00;">#include</span><span style="color: #005c5f;">"pitches.h"</span></p>
-<br>
-<p style="color: #95a5a6;">// notes in the melody:</p>
-<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> melody[] = </span><span style="color: #434f54;">{</span></p>
-<p><span style="color: #4e5b61;"> NOTE_C4, NOTE_G3, NOTE_G3, NOTE_A3, NOTE_G3, </span><span style="color: #005c5f;">0</span><span style="color: #4e5b61;">, NOTE_B3, NOTE_C4</span></p>
-<p><span style="color: #434f54;">}</span><span style="color: #4e5b61;">;</span></p>
-<br>
-<p style="color: #95a5a6;">// note durations: 4 = quarter note, 8 = eighth note, etc.:</p>
-<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> noteDurations[] = </span><span style="color: #434f54;">{</span></p>
-<p><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">4</span></p>
-<p><span style="color: #434f54;">}</span><span style="color: #4e5b61;">;</span></p>
+          <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: BUZZER</span>
+<p><span style="color: #00979d;">constint</span><span style="color: #4e5b61;"> pinoBuzzer = </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Conecte o pino positivo do buzzer no pino digital 8</span></p>
 <br>
 <p><span style="color: #00979d;">void</span><span style="color: #d35400;">setup</span><span style="color: #434f54;">(){</span></p>
-<p style="color: #95a5a6;">// iterate over the notes of the melody:</p>
-<p><span style="color: #728e00;">for</span><span style="color: #434f54;">(</span><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> thisNote = </span><span style="color: #005c5f;">0</span><span style="color: #4e5b61;">; thisNote &lt; </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">; thisNote++</span><span style="color: #434f54;">){</span></p>
-<br>
-<p style="color: #95a5a6;">// to calculate the note duration, take one second divided by the note type.</p>
-<p style="color: #95a5a6;">//e.g. quarter note = 1000 / 4, eighth note = 1000/8, etc.</p>
-<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> noteDuration = </span><span style="color: #005c5f;">1000</span><span style="color: #4e5b61;"> / </span><span style="color: #d35400;">noteDurations</span><span style="color: #4e5b61;">[thisNote];</span></p>
-<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">, </span><span style="color: #d35400;">melody</span><span style="color: #4e5b61;">[thisNote], noteDuration</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
-<br>
-<p style="color: #95a5a6;">// to distinguish the notes, set a minimum time between them.</p>
-<p style="color: #95a5a6;">// the note's duration + 30% seems to work well:</p>
-<p><span style="color: #00979d;">int</span><span style="color: #4e5b61;"> pauseBetweenNotes = noteDuration * </span><span style="color: #005c5f;">1.30</span><span style="color: #4e5b61;">;</span></p>
-<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pauseBetweenNotes</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
-<p style="color: #95a5a6;">// stop the tone playing:</p>
-<p><span style="color: #d35400;">noTone</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">8</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
-<p style="color: #434f54;">}</p>
+<p><span style="color: #d35400;">pinMode</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, OUTPUT</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
+<p style="color: #95a5a6;">// Toca uma frequência de 1000 Hz por 500 milissegundos (0,5 segundo)</p>
+<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, </span><span style="color: #005c5f;">1000</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">; </span></p>
+<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">1000</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Espera 1 segundo</span></p>
 <p style="color: #434f54;">}</p>
 <br>
 <p><span style="color: #00979d;">void</span><span style="color: #d35400;">loop</span><span style="color: #434f54;">(){</span></p>
-<p style="color: #95a5a6;">// no need to repeat the melody.</p>
+<p style="color: #95a5a6;">// Exemplo gerando bipes contínuos</p>
+<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, </span><span style="color: #005c5f;">2000</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">200</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // 2000 Hz por 200ms</span></p>
+<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Pausa de 500ms</span></p>
+<p><span style="color: #d35400;">noTone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Para o som (opcional se a duração já parou)</span></p>
+<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
 <p style="color: #434f54;">}</p>
-</code></pre>
+          </code></pre>
         </div>
 
+  <p class="text-slate-300">
+    Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
+  </p>
+
+  <!-- Lista de Desafios Sequenciais -->
+  <div class="space-y-6">
+    
+    <!-- Desafio 1 -->
+    <div id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
+        </div>
+      <h2>Desafio 1 – Alarme de emergência</h2>
+    
+    <h3>Situação-problema:</h3>
+    <p>Imagine que você precisa criar um alarme sonoro para indicar uma situação de emergência. Esse alarme deverá produzir um som agudo, seguido de uma pequena pausa, repetindo o padrão continuamente.</p>
+
+    <h3>O que você deverá fazer:</h3>
+    <ol>
+      <li>Altere a frequência do buzzer para 3000 Hz.</li>
+      <li>Faça o buzzer tocar durante 500 milissegundos.</li>
+      <li>Configure uma pausa de 200 milissegundos entre os sons.</li>
+      <li>O alarme deverá continuar funcionando enquanto o Arduino estiver ligado.</li>
+    </ol>
+
+    <h3>Perguntas para análise:</h3>
+    <ul>
+      <li>O que acontece com o som quando aumentamos a frequência?</li>
+      <li>Qual comando controla o tempo de duração do som?</li>
+      <li>Qual comando determina o intervalo entre os bipes?</li>
+    </ul>
+      </div>
+    </div>
+
+    <!-- Desafio 2 -->
+    <div id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
+        </div>
+     <h2>Desafio 2 – Alarme com dois tipos de sons</h2>
+
+    <h3>Situação-problema:</h3>
+    <p>Agora você deverá criar um alarme que utilize dois sons diferentes para representar uma situação de atenção. O primeiro som deverá ser grave e longo. O segundo deverá ser agudo e curto.</p>
+
+    <h3>O que você deverá fazer:</h3>
+    <ol>
+      <li>Primeiro som:
+        <ul>
+          <li>Frequência: 500 Hz.</li>
+          <li>Duração: 1000 milissegundos.</li>
+        </ul>
+      </li>
+      <li>Segundo som:
+        <ul>
+          <li>Frequência: 2500 Hz.</li>
+          <li>Duração: 200 milissegundos.</li>
+        </ul>
+      </li>
+      <li>Configure uma pausa de 500 milissegundos entre os dois sons.</li>
+      <li>Após executar os dois sons, o ciclo deverá recomeçar.</li>
+    </ol>
+
+    <h3>Perguntas para análise:</h3>
+    <ul>
+      <li>Qual é a diferença entre os sons de 500 Hz e 2500 Hz?</li>
+      <li>Como podemos modificar a programação para deixar o segundo som mais longo?</li>
+      <li>Por que utilizamos o comando <code>delay()</code> entre os sons?</li>
+    </ul>
+      </div>
+
+    </div>
+
+    <!-- Desafio 3 -->
+    <div id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+      <div class="flex items-center space-x-3">
+        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
+        </div>
+      <h2>Desafio 3 – Criando uma sequência musical</h2>
+
+    <h3>Situação-problema:</h3>
+    <p>Você foi convidado a desenvolver um pequeno dispositivo musical utilizando Arduino. Sua missão é programar uma sequência de três notas musicais diferentes.</p>
+
+    <h3>O que você deverá fazer:</h3>
+    <p>Programe o buzzer para reproduzir a seguinte sequência:</p>
+    
+    <table>
+      <thead>
+        <tr>
+          <th>Nota</th>
+          <th>Frequência</th>
+          <th>Duração</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Nota 1</td>
+          <td>262 Hz</td>
+          <td>500 ms</td>
+        </tr>
+        <tr>
+          <td>Nota 2</td>
+          <td>330 Hz</td>
+          <td>500 ms</td>
+        </tr>
+        <tr>
+          <td>Nota 3</td>
+          <td>392 Hz</td>
+          <td>1000 ms</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3>Regras do desafio:</h3>
+    <ol>
+      <li>O buzzer deverá reproduzir as três notas na ordem apresentada.</li>
+      <li>Entre cada nota, deverá existir uma pausa de 200 milissegundos.</li>
+      <li>Depois de tocar as três notas, deverá existir uma pausa de 1000 milissegundos.</li>
+      <li>A sequência deverá se repetir continuamente.</li>
+    </ol>
+    </div>
+
+  </div>
 
       </section>
 
