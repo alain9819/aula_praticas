@@ -698,664 +698,1262 @@
 
       <!-- SEÇÃO 7: ETAPA 5 - PROGRAMANDO -->
       <section id="sec-7" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            7
+        
+        <!-- Cabeçalho da Etapa -->
+        <header class="space-y-2">
+          <div class="flex items-center space-x-3">
+            <span class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+              7
+            </span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">
+              Etapa 5 — Acionando o LED com botão
+            </h2>
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 5 — Acionando o LED com botão</h2>
+          <p class="text-slate-300">
+            Confira os diagramas de ligação dos componentes e, em seguida, copie o código C++ completo para carregar na sua placa via Arduino IDE.
+          </p>
+        </header>
+
+        <!-- 1. Esquema Visual dos Componentes (Hardware) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-between space-y-3">
+            <img 
+              src="LED.png" 
+              alt="Diagrama de ligação do LED no pino 13 do Arduino" 
+              class="rounded-lg max-h-56 w-auto object-contain"
+            >
+            <figcaption class="text-xs text-slate-400 text-center">
+              Esquema de ligação do <strong class="text-teal-300">LED (Pino 13)</strong>
+            </figcaption>
+          </figure>
+
+          <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-4 flex flex-col items-center justify-between space-y-3">
+            <img 
+              src="botao.png" 
+              alt="Diagrama de ligação do botão (push-button) no pino 2 do Arduino" 
+              class="rounded-lg max-h-56 w-auto object-contain"
+            >
+            <figcaption class="text-xs text-slate-400 text-center">
+              Esquema de ligação do <strong class="text-teal-300">Botão (Pino 2)</strong>
+            </figcaption>
+          </figure>
         </div>
 
-        <p class="text-slate-300">
-          Abaixo está o código C++ completo para ser inserido no Arduino IDE. Você pode copiar este código com um clique!
-        </p>
-
-        <!-- Bloco de Código com Sintaxe e Botão Copiar -->
+        <!-- 2. Bloco de Código com Sintaxe e Botão Copiar (Software) -->
         <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+          <!-- Barra Superior Estilo Editor -->
           <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
             <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-red-500"></span>
-              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-              <span class="w-3 h-3 rounded-full bg-green-500"></span>
+              <span class="w-3 h-3 rounded-full bg-red-500" aria-hidden="true"></span>
+              <span class="w-3 h-3 rounded-full bg-yellow-500" aria-hidden="true"></span>
+              <span class="w-3 h-3 rounded-full bg-green-500" aria-hidden="true"></span>
               <span class="text-xs font-mono text-slate-400 ml-2">controle_led_botao.ino</span>
             </div>
-            <button id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2">
-              <i class="fa-regular fa-copy"></i>
+            <button 
+              id="copyCodeBtn" 
+              type="button"
+              aria-label="Copiar código Arduino"
+              class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2 cursor-pointer"
+            >
+              <i class="fa-regular fa-copy" aria-hidden="true"></i>
               <span>Copiar Código</span>
             </button>
           </div>
 
-
-          <img src="LED.png" alt="Diagrama do circuito Arduino com LED e botão">
-
-          <img src="botao.png" alt="Diagrama do circuito Arduino com LED e botão">
-
+          <!-- Código Fonte -->
           <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: CONTROLE DE LED COM BOTÃO - CÓDIGO BASE</span>
 
-<span class="text-slate-500">// Definição dos pinos</span>
-<span class="text-purple-400">int</span> botao = <span class="text-amber-300">2</span>;
-<span class="text-purple-400">int</span> led = <span class="text-amber-300">13</span>;
+      <span class="text-slate-500">// Definição dos pinos</span>
+      <span class="text-purple-400">int</span> botao = <span class="text-amber-300">2</span>;
+      <span class="text-purple-400">int</span> led = <span class="text-amber-300">13</span>;
 
-<span class="text-purple-400">void</span> <span class="text-blue-400">setup</span>() {
-  <span class="text-slate-500">// Configura o pino do botão como entrada</span>
-  <span class="text-teal-400">pinMode</span>(botao, <span class="text-teal-300">INPUT</span>);
+      <span class="text-purple-400">void</span> <span class="text-blue-400">setup</span>() {
+        <span class="text-slate-500">// Configura o pino do botão como entrada</span>
+        <span class="text-teal-400">pinMode</span>(botao, <span class="text-teal-300">INPUT</span>);
 
-  <span class="text-slate-500">// Configura o pino do LED como saída</span>
-  <span class="text-teal-400">pinMode</span>(led, <span class="text-teal-300">OUTPUT</span>);
-}
+        <span class="text-slate-500">// Configura o pino do LED como saída</span>
+        <span class="text-teal-400">pinMode</span>(led, <span class="text-teal-300">OUTPUT</span>);
+      }
 
-<span class="text-purple-400">void</span> <span class="text-blue-400">loop</span>() {
-  <span class="text-slate-500">// Lê o estado lógico do botão (HIGH ou LOW)</span>
-  <span class="text-purple-400">int</span> estadoBotao = <span class="text-teal-400">digitalRead</span>(botao);
+      <span class="text-purple-400">void</span> <span class="text-blue-400">loop</span>() {
+        <span class="text-slate-500">// Lê o estado lógico do botão (HIGH ou LOW)</span>
+        <span class="text-purple-400">int</span> estadoBotao = <span class="text-teal-400">digitalRead</span>(botao);
 
-  <span class="text-slate-500">// Verifica se o botão está pressionado</span>
-  <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {
-    <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Acende o LED</span>
-  } <span class="text-purple-400">else</span> {
-    <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Apaga o LED</span>
-  }
-}</code></pre>
+        <span class="text-slate-500">// Verifica se o botão está pressionado</span>
+        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {
+          <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Acende o LED</span>
+        } <span class="text-purple-400">else</span> {
+          <span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Apaga o LED</span>
+        }
+      }</code></pre>
         </div>
 
-        <!-- Análise Técnica do Código -->
+        <!-- 3. Análise Técnica e Didática do Código -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
-          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
-            <h4 class="font-bold text-teal-300">1. Variáveis de Pino</h4>
-            <p class="text-slate-400">Criamos <code class="text-amber-300">int botao = 2;</code> e <code class="text-amber-300">led = 13;</code> para que possamos trocar portas facilmente em um só lugar caso o circuito mude.</p>
-          </div>
-          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
-            <h4 class="font-bold text-teal-300">2. Função setup()</h4>
-            <p class="text-slate-400">Executada uma única vez na energização. Define quem vai ler dados (<code class="text-teal-300">INPUT</code>) e quem vai enviar corrente (<code class="text-teal-300">OUTPUT</code>).</p>
-          </div>
-          <div class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
-            <h4 class="font-bold text-teal-300">3. Decisão no loop()</h4>
-            <p class="text-slate-400">A instrução <code class="text-purple-400">if/else</code> avalia milissegundo a milissegundo o estado lido por <code class="text-teal-400">digitalRead</code> e toma a decisão.</p>
-          </div>
+          <article class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h3 class="font-bold text-teal-300 text-sm">1. Variáveis de Pino</h3>
+            <p class="text-slate-400 leading-relaxed">
+              Criamos <code class="text-amber-300">int botao = 2;</code> e <code class="text-amber-300">int led = 13;</code> para facilitar a troca de portas em um só lugar caso a montagem mude.
+            </p>
+          </article>
+
+          <article class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h3 class="font-bold text-teal-300 text-sm">2. Função setup()</h3>
+            <p class="text-slate-400 leading-relaxed">
+              Executada uma única vez ao ligar a placa. Define quem vai ler sinais (<code class="text-teal-300">INPUT</code>) e quem vai enviar corrente (<code class="text-teal-300">OUTPUT</code>).
+            </p>
+          </article>
+
+          <article class="p-4 bg-slate-900 border border-slate-800 rounded-xl space-y-2">
+            <h3 class="font-bold text-teal-300 text-sm">3. Decisão no loop()</h3>
+            <p class="text-slate-400 leading-relaxed">
+              A estrutura <code class="text-purple-400">if/else</code> avalia continuamente o estado lido por <code class="text-teal-400">digitalRead</code> e decide se acende ou apaga o LED.
+            </p>
+          </article>
         </div>
+
       </section>
 
 
       <!-- SEÇÃO 9: ETAPA - DESAFIOS DE PROGRAMAÇÃO -->
-<section id="sec-9" class="scroll-mt-24 space-y-6">
-  <div class="flex items-center space-x-3">
-    <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-      9
-    </div>
-    <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 7 — Modificando o projeto (Desafios)</h2>
-  </div>
-
-  <p class="text-slate-300">
-    Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
-  </p>
-
-  <!-- Lista de Desafios Sequenciais -->
-  <div class="space-y-6">
-    
-    <!-- Desafio 1 -->
-    <div id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
-        <h3 class="text-lg font-bold text-white">Inverter o comportamento do LED</h3>
-      </div>
-      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED permanecer aceso quando o botão estiver solto e apagar quando for pressionado.</p>
-      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-        <span class="text-slate-500">// Alteração na instrução condicional no loop():</span><br>
-        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">LOW</span>) { <span class="text-slate-500">// Se botão estiver solto</span><br>
-        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Liga LED</span><br>
-        } <span class="text-purple-400">else</span> {<br>
-        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Desliga LED</span><br>
-        }
-      </div>
-    </div>
-
-    <!-- Desafio 2 -->
-    <div id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
-        <h3 class="text-lg font-bold text-white">Alterar o tempo de acionamento (Delay)</h3>
-      </div>
-      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Manter o LED aceso por 2 segundos (2000 ms) após o clique no botão.</p>
-      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
-        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
-        &nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">2000</span>); <span class="text-slate-500">// Mantém aceso por 2 segundos</span><br>
-        } <span class="text-purple-400">else</span> {<br>
-        &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
-        }
-      </div>
-
-    </div>
-
-    <!-- Desafio 3 -->
-    <div id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
-        <h3 class="text-lg font-bold text-white">Criar um sinalizador luminoso (Laço for)</h3>
-      </div>
-      <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED piscar 3 vezes seguidas ao pressionar o botão.</p>
-      <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
-        <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
-        &nbsp;&nbsp;<span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = 0; i &lt; 3; i++) {<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
-        &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
-        &nbsp;&nbsp;}<br>
-        }
-      </div>
-
-    </div>
-
-  </div>
-</section>
-
-  <!-- SEÇÃO 7: ETAPA 5 - PROGRAMANDO -->
-      <section id="sec-7" class="scroll-mt-24 space-y-6">
+      <section id="sec-9" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+            9
+          </div>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 7 — Modificando o projeto (Desafios)</h2>
+        </div>
+
+        <p class="text-slate-300">
+          Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
+        </p>
+
+        <!-- Lista de Desafios Sequenciais -->
+        <div class="space-y-6">
+          
+          <!-- Desafio 1 -->
+          <div id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
+              <h3 class="text-lg font-bold text-white">Inverter o comportamento do LED</h3>
+            </div>
+            <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED permanecer aceso quando o botão estiver solto e apagar quando for pressionado.</p>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+              <span class="text-slate-500">// Alteração na instrução condicional no loop():</span><br>
+              <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">LOW</span>) { <span class="text-slate-500">// Se botão estiver solto</span><br>
+              &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>); <span class="text-slate-500">// Liga LED</span><br>
+              } <span class="text-purple-400">else</span> {<br>
+              &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);  <span class="text-slate-500">// Desliga LED</span><br>
+              }
+            </div>
+          </div>
+
+          <!-- Desafio 2 -->
+          <div id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
+              <h3 class="text-lg font-bold text-white">Alterar o tempo de acionamento (Delay)</h3>
+            </div>
+            <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Manter o LED aceso por 2 segundos (2000 ms) após o clique no botão.</p>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+              <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+              &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+              &nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">2000</span>); <span class="text-slate-500">// Mantém aceso por 2 segundos</span><br>
+              } <span class="text-purple-400">else</span> {<br>
+              &nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+              }
+            </div>
+
+          </div>
+
+          <!-- Desafio 3 -->
+          <div id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
+            <div class="flex items-center space-x-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
+              <h3 class="text-lg font-bold text-white">Criar um sinalizador luminoso (Laço for)</h3>
+            </div>
+            <p class="text-sm text-slate-300"><strong>Objetivo:</strong> Fazer o LED piscar 3 vezes seguidas ao pressionar o botão.</p>
+            <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300">
+              <span class="text-purple-400">if</span> (estadoBotao == <span class="text-teal-300">HIGH</span>) {<br>
+              &nbsp;&nbsp;<span class="text-purple-400">for</span> (<span class="text-purple-400">int</span> i = 0; i &lt; 3; i++) {<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">HIGH</span>);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">digitalWrite</span>(led, <span class="text-teal-300">LOW</span>);<br>
+              &nbsp;&nbsp;&nbsp;&nbsp;<span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);<br>
+              &nbsp;&nbsp;}<br>
+              }
+            </div>
+
+          </div>
+
+        </div>
+      </section>
+
+      <!-- =====================================================================
+     SEÇÃO 10: Buzzer Piezo (Etapa 6)
+     ===================================================================== -->
+      <section id="sec-10" class="scroll-mt-24 space-y-8">
+
+        <!-- 1. Cabeçalho da Etapa -->
+        <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30 shrink-0">
             7
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Acionando o Buzzer Piezo</h2>
-        </div>
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Prática Guiada</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Acionando o Buzzer Piezo</h2>
+          </div>
+        </header>
 
-        <p class="text-slate-300">
-          Abaixo está o código C++ completo para ser inserido no Arduino IDE.
-        </p>
-
-        <!-- Bloco de Código com Sintaxe e Botão Copiar -->
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
-          <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
-            <div class="flex items-center space-x-2">
-              <span class="w-3 h-3 rounded-full bg-red-500"></span>
-              <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
-              <span class="w-3 h-3 rounded-full bg-green-500"></span>
-              <span class="text-xs font-mono text-slate-400 ml-2">BUZZER.ino</span>
-            </div>
-            <button id="copyCodeBtn" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2">
-              <i class="fa-regular fa-copy"></i>
-              
-            </button>
+        <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+        <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-teal-400"></i>
+              Esquema de Ligação
+            </h3>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+              Pino Digital 8 + GND
+            </span>
           </div>
 
-
-          <img src="tone.png" alt="Diagrama do circuito Arduino com LED e botão">
-
-          <pre class="p-5 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: BUZZER</span>
-<p><span style="color: #00979d;">constint</span><span style="color: #4e5b61;"> pinoBuzzer = </span><span style="color: #005c5f;">8</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Conecte o pino positivo do buzzer no pino digital 8</span></p>
-<br>
-<p><span style="color: #00979d;">void</span><span style="color: #d35400;">setup</span><span style="color: #434f54;">(){</span></p>
-<p><span style="color: #d35400;">pinMode</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, OUTPUT</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
-<p style="color: #95a5a6;">// Toca uma frequência de 1000 Hz por 500 milissegundos (0,5 segundo)</p>
-<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, </span><span style="color: #005c5f;">1000</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">; </span></p>
-<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">1000</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Espera 1 segundo</span></p>
-<p style="color: #434f54;">}</p>
-<br>
-<p><span style="color: #00979d;">void</span><span style="color: #d35400;">loop</span><span style="color: #434f54;">(){</span></p>
-<p style="color: #95a5a6;">// Exemplo gerando bipes contínuos</p>
-<p><span style="color: #d35400;">tone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer, </span><span style="color: #005c5f;">2000</span><span style="color: #4e5b61;">, </span><span style="color: #005c5f;">200</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // 2000 Hz por 200ms</span></p>
-<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Pausa de 500ms</span></p>
-<p><span style="color: #d35400;">noTone</span><span style="color: #434f54;">(</span><span style="color: #4e5b61;">pinoBuzzer</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span><span style="color: #95a5a6;"> // Para o som (opcional se a duração já parou)</span></p>
-<p><span style="color: #d35400;">delay</span><span style="color: #434f54;">(</span><span style="color: #005c5f;">500</span><span style="color: #434f54;">)</span><span style="color: #4e5b61;">;</span></p>
-<p style="color: #434f54;">}</p>
-          </code></pre>
-        </div>
-
-  <p class="text-slate-300">
-    Um bom programador experimenta e transforma a lógica! Complete os 3 desafios práticos abaixo alterando o código do Arduino.
-  </p>
-
-  <!-- Lista de Desafios Sequenciais -->
-  <div class="space-y-6">
-    
-    <!-- Desafio 1 -->
-    <div id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
-        </div>
-      <h2>Desafio 1 – Alarme de emergência</h2>
-    
-    <h3>Situação-problema:</h3>
-    <p>Imagine que você precisa criar um alarme sonoro para indicar uma situação de emergência. Esse alarme deverá produzir um som agudo, seguido de uma pequena pausa, repetindo o padrão continuamente.</p>
-
-    <h3>O que você deverá fazer:</h3>
-    <ol>
-      <li>Altere a frequência do buzzer para 3000 Hz.</li>
-      <li>Faça o buzzer tocar durante 500 milissegundos.</li>
-      <li>Configure uma pausa de 200 milissegundos entre os sons.</li>
-      <li>O alarme deverá continuar funcionando enquanto o Arduino estiver ligado.</li>
-    </ol>
-
-    <h3>Perguntas para análise:</h3>
-    <ul>
-      <li>O que acontece com o som quando aumentamos a frequência?</li>
-      <li>Qual comando controla o tempo de duração do som?</li>
-      <li>Qual comando determina o intervalo entre os bipes?</li>
-    </ul>
-      </div>
-    </div>
-
-    <!-- Desafio 2 -->
-    <div id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
-        </div>
-     <h2>Desafio 2 – Alarme com dois tipos de sons</h2>
-
-    <h3>Situação-problema:</h3>
-    <p>Agora você deverá criar um alarme que utilize dois sons diferentes para representar uma situação de atenção. O primeiro som deverá ser grave e longo. O segundo deverá ser agudo e curto.</p>
-
-    <h3>O que você deverá fazer:</h3>
-    <ol>
-      <li>Primeiro som:
-        <ul>
-          <li>Frequência: 500 Hz.</li>
-          <li>Duração: 1000 milissegundos.</li>
-        </ul>
-      </li>
-      <li>Segundo som:
-        <ul>
-          <li>Frequência: 2500 Hz.</li>
-          <li>Duração: 200 milissegundos.</li>
-        </ul>
-      </li>
-      <li>Configure uma pausa de 500 milissegundos entre os dois sons.</li>
-      <li>Após executar os dois sons, o ciclo deverá recomeçar.</li>
-    </ol>
-
-    <h3>Perguntas para análise:</h3>
-    <ul>
-      <li>Qual é a diferença entre os sons de 500 Hz e 2500 Hz?</li>
-      <li>Como podemos modificar a programação para deixar o segundo som mais longo?</li>
-      <li>Por que utilizamos o comando <code>delay()</code> entre os sons?</li>
-    </ul>
-      </div>
-
-    </div>
-
-    <!-- Desafio 3 -->
-    <div id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-      <div class="flex items-center space-x-3">
-        <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
-        </div>
-      <h2>Desafio 3 – Criando uma sequência musical</h2>
-
-    <h3>Situação-problema:</h3>
-    <p>Você foi convidado a desenvolver um pequeno dispositivo musical utilizando Arduino. Sua missão é programar uma sequência de três notas musicais diferentes.</p>
-
-    <h3>O que você deverá fazer:</h3>
-    <p>Programe o buzzer para reproduzir a seguinte sequência:</p>
-    
-    <table>
-      <thead>
-        <tr>
-          <th>Nota</th>
-          <th>Frequência</th>
-          <th>Duração</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td>Nota 1</td>
-          <td>262 Hz</td>
-          <td>500 ms</td>
-        </tr>
-        <tr>
-          <td>Nota 2</td>
-          <td>330 Hz</td>
-          <td>500 ms</td>
-        </tr>
-        <tr>
-          <td>Nota 3</td>
-          <td>392 Hz</td>
-          <td>1000 ms</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <h3>Regras do desafio:</h3>
-    <ol>
-      <li>O buzzer deverá reproduzir as três notas na ordem apresentada.</li>
-      <li>Entre cada nota, deverá existir uma pausa de 200 milissegundos.</li>
-      <li>Depois de tocar as três notas, deverá existir uma pausa de 1000 milissegundos.</li>
-      <li>A sequência deverá se repetir continuamente.</li>
-    </ol>
-    </div>
-
-  </div>
-
-      </section>
-
-
-
-      <!-- SEÇÃO 10: ETAPA 8 - INVESTIGANDO ERROS (TROUBLESHOOTING MATRIX) -->
-      <!--<section id="sec-10" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            10
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 8 — Investigando erros (Troubleshooting)</h2>
-        </div>
-
-        <p class="text-slate-300">
-          O circuito não funcionou como esperado? Não se preocupe! Clique nos sintomas abaixo para descobrir como diagnosticar e resolver o problema:
-        </p>
-
-        // Matriz Clicável de Erros -->
-        <!--<div class="grid grid-cols-1 md:grid-cols-2 gap-4" id="troubleGrid">
-          
-          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-red-400 text-sm flex items-center space-x-2">
-                <i class="fa-solid fa-circle-xmark"></i>
-                <span>Sintoma: O LED nunca acende</span>
-              </span>
-              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
-            </div>
-            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
-              <p><strong>O que investigar:</strong></p>
-              <ul class="list-disc list-inside space-y-1 text-slate-400">
-                <li>Verifique se a polaridade do LED está invertida (Ânodo no pino 8, Cátodo no GND).</li>
-                <li>Confirme se o resistor de 220 Ω está conectado em série no mesmo trilho do LED.</li>
-                <li>Certifique-se de que os números dos pinos no código correspondem à fiação física.</li>
-              </ul>
-            </div>
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+            <img
+              src="tone.png"
+              alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
+              class="max-w-full h-auto rounded-lg"
+            >
           </div>
 
-          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-amber-400 text-sm flex items-center space-x-2">
-                <i class="fa-solid fa-circle-exclamation"></i>
-                <span>Sintoma: O LED fica sempre aceso</span>
-              </span>
-              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
-            </div>
-            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
-              <p><strong>O que investigar:</strong></p>
-              <ul class="list-disc list-inside space-y-1 text-slate-400">
-                <li>Verifique se o resistor de 10 kΩ (Pull-down) está desconectado do GND.</li>
-                <li>Confirme se as pernas do botão não estão em curto na protoboard.</li>
-                <li>Verifique a condição no <code class="text-teal-300">if</code> (HIGH vs LOW).</li>
-              </ul>
-            </div>
+          <figcaption class="text-xs text-slate-400 text-center">
+            Conecte o terminal positivo (+) do buzzer ao <strong class="text-slate-200">pino digital 8</strong> e o terminal negativo (–) ao <strong class="text-slate-200">GND</strong>.
+          </figcaption>
+        </figure>
+
+        <!-- 3. Bloco de Código-Base -->
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h3 class="text-lg font-semibold text-white">Código-Base (Arduino IDE)</h3>
+            <p class="text-sm text-slate-400">Copie e carregue o código C++ abaixo na sua placa.</p>
           </div>
 
-          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-purple-400 text-sm flex items-center space-x-2">
-                <i class="fa-solid fa-bolt"></i>
-                <span>Sintoma: LED acende sem apertar nada</span>
-              </span>
-              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
-            </div>
-            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
-              <p><strong>O que investigar:</strong></p>
-              <ul class="list-disc list-inside space-y-1 text-slate-400">
-                <li>Ausência do resistor de Pull-down deixando o pino de entrada "flutuando" (sensível a ruído estático).</li>
-              </ul>
-            </div>
-          </div>
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+            <!-- Barra superior estilo editor -->
+            <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                <span class="text-xs font-mono text-slate-300 ml-2">BUZZER.ino</span>
+              </div>
 
-          <div class="trouble-card bg-slate-900 border border-slate-800 rounded-2xl p-5 cursor-pointer hover:border-teal-500/50 transition-all space-y-3">
-            <div class="flex items-center justify-between">
-              <span class="font-bold text-blue-400 text-sm flex items-center space-x-2">
-                <i class="fa-solid fa-toggle-off"></i>
-                <span>Sintoma: O botão não gera efeito</span>
-              </span>
-              <i class="fa-solid fa-chevron-down text-slate-500 text-xs transition-transform chevron"></i>
-            </div>
-            <div class="trouble-details hidden pt-2 text-xs text-slate-300 space-y-2 border-t border-slate-800">
-              <p><strong>O que investigar:</strong></p>
-              <ul class="list-disc list-inside space-y-1 text-slate-400">
-                <li>Verifique se você esqueceu de clicar em "Iniciar Simulação" no topo do Tinkercad.</li>
-                <li>Verifique se usou os dois pinos certos do terminal do botão de 4 pernas.</li>
-              </ul>
-            </div>
-          </div>
-
-        </div>
-      </section>
-
-      // SEÇÃO 11: ETAPA 9 - DESAFIO FINAL DE AUTOMATIZAÇÃO -->
-      <!--<section id="sec-11" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            11
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 9 — Desafio final: crie sua própria automação</h2>
-        </div>
-
-        <p class="text-slate-300">
-          A escola precisa de um sistema de sinalização luminosa para indicar quando um equipamento pode ser utilizado. Escolha uma das três propostas abaixo e implemente:
-        </p>
-
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
-            <div class="space-y-2">
-              <span class="px-2.5 py-1 rounded-full bg-blue-500/20 text-blue-300 text-xs font-bold">Opção A</span>
-              <h3 class="font-bold text-white text-base">Indicador Simples</h3>
-              <p class="text-xs text-slate-300">O LED acende quando o botão permanece pressionado e apaga instantaneamente ao soltar.</p>
-            </div>
-            <span class="text-[10px] text-teal-400 font-mono font-semibold">Nível: Iniciante</span>
-          </div>
-
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
-            <div class="space-y-2">
-              <span class="px-2.5 py-1 rounded-full bg-amber-500/20 text-amber-300 text-xs font-bold">Opção B</span>
-              <h3 class="font-bold text-white text-base">Sinalizador de Alerta</h3>
-              <p class="text-xs text-slate-300">Ao pressionar o botão uma vez, o LED pisca 3 vezes seguidas como um aviso luminoso de emergência.</p>
-            </div>
-            <span class="text-[10px] text-amber-400 font-mono font-semibold">Nível: Intermediário</span>
-          </div>
-
-          <div class="bg-slate-900 border border-slate-800 rounded-2xl p-5 space-y-3 relative overflow-hidden flex flex-col justify-between">
-            <div class="space-y-2">
-              <span class="px-2.5 py-1 rounded-full bg-purple-500/20 text-purple-300 text-xs font-bold">Opção C</span>
-              <h3 class="font-bold text-white text-base">Indicador de Autorização (Toggle)</h3>
-              <p class="text-xs text-slate-300">O 1º toque no botão liga o LED e ele continua aceso. O 2º toque apaga o LED (Chave Liga/Desliga).</p>
-            </div>
-            <span class="text-[10px] text-purple-400 font-mono font-semibold">Nível: Avançado</span>
-          </div>
-        </div>
-      </section>
-
-      // SEÇÃO 12: ETAPA 10 - RELATÓRIO DE DESENVOLVIMENTO (INTERATIVO COM IMPRESSÃO) -->
-      <!--<section id="sec-12" class="scroll-mt-24 space-y-6">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            12
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 10 — Registrando os resultados</h2>
-        </div>
-
-        <p class="text-slate-300">
-          Preencha o formulário do relatório abaixo. Suas respostas são salvas automaticamente no navegador. Ao finalizar, você pode imprimir ou salvar em PDF!
-        </p>
-
-        <form id="printable-report" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 md:p-8 space-y-6">
-          <div class="border-b border-slate-800 pb-4 flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <h3 class="text-xl font-bold text-white">Relatório de Desenvolvimento Prático</h3>
-              <p class="text-xs text-slate-400">Arduino Uno - Entradas, Saídas e Automação com LED</p>
-            </div>
-            <div class="flex items-center space-x-3 no-print">
-              <button type="button" id="clearReportBtn" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs rounded-xl transition-all">
-                Limpar Form
-              </button>
-              <button type="button" id="printReportBtn" class="px-4 py-2 bg-arduino hover:bg-teal-600 text-white font-bold text-xs rounded-xl shadow-lg transition-all flex items-center space-x-2">
-                <i class="fa-solid fa-print"></i>
-                <span>Exportar / Imprimir PDF</span>
+              <button
+                id="copyCodeBtn"
+                type="button"
+                aria-label="Copiar código Arduino"
+                class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2 cursor-pointer"
+              >
+                <i class="fa-regular fa-copy"></i>
+                <span>Copiar código</span>
               </button>
             </div>
-          </div>
 
-          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">1. Nome do Aluno / Dupla:</label>
-              <input type="text" id="rep_q1" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: Maria Silva e João Santos">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">2. Nome do Projeto:</label>
-              <input type="text" id="rep_q2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" value="Projeto 01 - Controle de LED com Botão">
-            </div>
-          </div>
+            <!-- Área do Código (sem tags <p> ou <br> internas para preservar a cópia limpa) -->
+            <div class="bg-slate-950 p-5">
+              <pre class="text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: BUZZER</span>
+      <span class="text-cyan-400">const int</span> pinoBuzzer = <span class="text-emerald-400">8</span>; <span class="text-slate-500">// Conecte o pino positivo do buzzer no pino digital 8</span>
 
-          <div class="space-y-4">
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">3. Qual problema o circuito procura resolver?</label>
-              <textarea id="rep_q3" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Escreva a resposta..."></textarea>
-            </div>
+      <span class="text-cyan-400">void</span> <span class="text-amber-400">setup</span>() {
+        <span class="text-amber-400">pinMode</span>(pinoBuzzer, <span class="text-cyan-300">OUTPUT</span>);
 
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">4. Qual componente foi utilizado como ENTRADA?</label>
-                <input type="text" id="rep_q4" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: Botão de pressão">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">5. Qual componente foi utilizado como SAÍDA?</label>
-                <input type="text" id="rep_q5" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Ex: LED difuso vermelho">
-              </div>
-            </div>
+        <span class="text-slate-500">// Toca uma frequência de 1000 Hz por 500 milissegundos (0,5 segundo)</span>
+        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">1000</span>, <span class="text-emerald-400">500</span>);
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">1000</span>); <span class="text-slate-500">// Espera 1 segundo</span>
+      }
 
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">6. Explique o que acontece eletricamente e no código quando o botão é pressionado:</label>
-              <textarea id="rep_q6" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Descreva o fluxo de sinal do pino 2 ao pino 8..."></textarea>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">7. Qual a função do resistor de 220 Ω no LED?</label>
-                <input type="text" id="rep_q7" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Proteger contra superexposição de corrente...">
-              </div>
-              <div>
-                <label class="block text-xs font-semibold text-slate-300 mb-1">8. Qual a função do resistor de 10 kΩ (Pull-down)?</label>
-                <input type="text" id="rep_q8" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Estabilizar o sinal em nível LOW em repouso...">
-              </div>
-            </div>
-
-            <div>
-              <label class="block text-xs font-semibold text-slate-300 mb-1">9. Qual foi o principal erro encontrado durante a montagem/programação e como corrigiram?</label>
-              <textarea id="rep_q9" rows="2" class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-white focus:border-teal-400 focus:outline-none" placeholder="Relate as dificuldades e soluções..."></textarea>
+      <span class="text-cyan-400">void</span> <span class="text-amber-400">loop</span>() {
+        <span class="text-slate-500">// Exemplo gerando bipes contínuos</span>
+        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>, <span class="text-emerald-400">200</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">500</span>);             <span class="text-slate-500">// Pausa de 500ms</span>
+        <span class="text-amber-400">noTone</span>(pinoBuzzer);        <span class="text-slate-500">// Para o som (opcional se a duração já parou)</span>
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">500</span>);
+      }</code></pre>
             </div>
           </div>
-        </form>
+        </div>
+
+        <!-- 4. Lista de Desafios Sequenciais (Mão na Massa) -->
+        <div class="space-y-6 pt-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white">Desafios Práticos</h3>
+            <span class="text-xs text-slate-400">3 níveis progressivos</span>
+          </div>
+
+          <!-- Desafio 1 -->
+          <article id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+                Desafio 1
+              </span>
+              <h4 class="text-xl font-bold text-white">Alarme de emergência</h4>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+              <p class="text-slate-300 leading-relaxed">
+                Imagine que você precisa criar um alarme sonoro para indicar uma situação de emergência. Esse alarme deverá produzir um som agudo, seguido de uma pequena pausa, repetindo o padrão continuamente.
+              </p>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">O que você deverá fazer</h5>
+              <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
+                <li>Altere a frequência do buzzer para <strong class="text-white">3000 Hz</strong>.</li>
+                <li>Faça o buzzer tocar durante <strong class="text-white">500 milissegundos</strong>.</li>
+                <li>Configure uma pausa de <strong class="text-white">200 milissegundos</strong> entre os sons.</li>
+                <li>Garanta que o alarme continue funcionando enquanto o Arduino estiver ligado.</li>
+              </ol>
+            </div>
+
+            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Perguntas para análise</h5>
+              <ul class="list-disc list-inside space-y-1.5 text-slate-300 text-sm">
+                <li>O que acontece com o som quando aumentamos a frequência?</li>
+                <li>Qual comando controla o tempo de duração do som?</li>
+                <li>Qual comando determina o intervalo entre os bipes?</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Desafio 2 -->
+          <article id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+                Desafio 2
+              </span>
+              <h4 class="text-xl font-bold text-white">Alarme com dois tipos de sons</h4>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+              <p class="text-slate-300 leading-relaxed">
+                Agora você deverá criar um alarme que utilize dois sons diferentes para representar uma situação de atenção. O primeiro som deverá ser <strong class="text-white">grave e longo</strong>. O segundo deverá ser <strong class="text-white">agudo e curto</strong>.
+              </p>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">O que você deverá fazer</h5>
+              <ol class="list-decimal list-inside space-y-2 text-slate-300">
+                <li>
+                  <strong class="text-white">Primeiro som:</strong>
+                  <ul class="list-disc list-inside pl-5 mt-1 space-y-1 text-slate-400">
+                    <li>Frequência: <span class="text-slate-200">500 Hz</span></li>
+                    <li>Duração: <span class="text-slate-200">1000 milissegundos</span></li>
+                  </ul>
+                </li>
+                <li>
+                  <strong class="text-white">Segundo som:</strong>
+                  <ul class="list-disc list-inside pl-5 mt-1 space-y-1 text-slate-400">
+                    <li>Frequência: <span class="text-slate-200">2500 Hz</span></li>
+                    <li>Duração: <span class="text-slate-200">200 milissegundos</span></li>
+                  </ul>
+                </li>
+                <li>Configure uma pausa de <strong class="text-white">500 milissegundos</strong> entre os dois sons.</li>
+                <li>Após executar os dois sons, o ciclo deverá recomeçar.</li>
+              </ol>
+            </div>
+
+            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Perguntas para análise</h5>
+              <ul class="list-disc list-inside space-y-1.5 text-slate-300 text-sm">
+                <li>Qual é a diferença entre os sons de 500 Hz e 2500 Hz?</li>
+                <li>Como podemos modificar a programação para deixar o segundo som mais longo?</li>
+                <li>Por que utilizamos o comando <code class="px-1.5 py-0.5 rounded bg-slate-800 text-teal-300 font-mono text-xs">delay()</code> entre os sons?</li>
+              </ul>
+            </div>
+          </article>
+
+          <!-- Desafio 3 -->
+          <article id="c3-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+                Desafio 3
+              </span>
+              <h4 class="text-xl font-bold text-white">Criando uma sequência musical</h4>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+              <p class="text-slate-300 leading-relaxed">
+                Você foi convidado a desenvolver um pequeno dispositivo musical utilizando Arduino. Sua missão é programar uma sequência de três notas musicais diferentes.
+              </p>
+            </div>
+
+            <div class="space-y-3">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">O que você deverá fazer</h5>
+              <p class="text-slate-300 text-sm">Programe o buzzer para reproduzir a seguinte sequência:</p>
+
+              <div class="overflow-x-auto rounded-xl border border-slate-800">
+                <table class="w-full text-left text-sm text-slate-300">
+                  <thead class="bg-slate-800/80 text-xs uppercase text-teal-300">
+                    <tr>
+                      <th scope="col" class="px-4 py-3">Nota</th>
+                      <th scope="col" class="px-4 py-3">Frequência</th>
+                      <th scope="col" class="px-4 py-3">Duração</th>
+                    </tr>
+                  </thead>
+                  <tbody class="divide-y divide-slate-800 bg-slate-950/60">
+                    <tr>
+                      <td class="px-4 py-2.5 font-medium text-white">Nota 1 (Dó)</td>
+                      <td class="px-4 py-2.5 font-mono text-emerald-400">262 Hz</td>
+                      <td class="px-4 py-2.5 font-mono">500 ms</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2.5 font-medium text-white">Nota 2 (Mi)</td>
+                      <td class="px-4 py-2.5 font-mono text-emerald-400">330 Hz</td>
+                      <td class="px-4 py-2.5 font-mono">500 ms</td>
+                    </tr>
+                    <tr>
+                      <td class="px-4 py-2.5 font-medium text-white">Nota 3 (Sol)</td>
+                      <td class="px-4 py-2.5 font-mono text-emerald-400">392 Hz</td>
+                      <td class="px-4 py-2.5 font-mono">1000 ms</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Regras do desafio</h5>
+              <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
+                <li>O buzzer deverá reproduzir as três notas na ordem apresentada.</li>
+                <li>Entre cada nota, deverá existir uma pausa de <strong class="text-white">200 milissegundos</strong>.</li>
+                <li>Depois de tocar as três notas, deverá existir uma pausa de <strong class="text-white">1000 milissegundos</strong>.</li>
+                <li>A sequência deverá se repetir continuamente.</li>
+              </ol>
+            </div>
+          </article>
+
+        </div>
+
       </section>
 
-      // SEÇÃO 13: CHECKLIST DE APRENDIZAGEM (INTERATIVO COM MEDIDOR) -->
-       <!--<section id="sec-13" class="scroll-mt-24 space-y-6">
+      <!-- =====================================================================
+     CONTINUAÇÃO DO MATERIAL DIDÁTICO: PRIMEIROS PASSOS COM O SENSOR LDR
+     Estilizado com Tailwind CSS no padrão visual da Seção 9
+     ===================================================================== -->
+
+    <section id="sec-ldr" class="modulo-ldr scroll-mt-24 space-y-6" aria-labelledby="titulo-ldr">
+      <!-- Cabeçalho da Seção -->
+      <header class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
+          10
+        </div>
+        <h2 id="titulo-ldr" class="text-2xl md:text-3xl font-bold text-white">Primeiros passos com o sensor LDR</h2>
+      </header>
+
+      <!-- Introdução teórica -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
         <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            13
-          </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 11 — Checklist de aprendizagem</h2>
+          <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Conceito</span>
+          <h3 class="text-lg font-bold text-white">Conhecendo o componente: LDR</h3>
         </div>
 
-        <p class="text-slate-300">
-          Marque as caixas à medida que concluir cada habilidade prática:
+        <p class="text-sm text-slate-300">
+          O LDR é um componente eletrônico que altera sua resistência elétrica conforme a quantidade de luz que recebe.
+        </p>
+        <p class="text-sm text-slate-300">Seu funcionamento é bastante simples:</p>
+        <ul class="list-disc list-inside space-y-1 text-sm text-slate-300">
+          <li><strong class="text-white">Muita luz:</strong> a resistência elétrica diminui.</li>
+          <li><strong class="text-white">Pouca luz:</strong> a resistência elétrica aumenta.</li>
+        </ul>
+        <p class="text-sm text-slate-300">
+          O Arduino consegue identificar essas alterações por meio de uma entrada analógica.
         </p>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4">
-          <div class="flex items-center justify-between pb-4 border-b border-slate-800">
-            <span class="text-sm font-bold text-white">Meta de Aprendizagem</span>
-            <span id="checklistCounter" class="text-xs font-bold text-teal-400 bg-teal-500/10 px-3 py-1 rounded-full border border-teal-500/30">0 de 10 Concluídos</span>
+        <div class="pt-4 border-t border-slate-800 space-y-4">
+          <h3 class="text-lg font-bold text-white">Conhecendo a leitura analógica</h3>
+          <p class="text-sm text-slate-300">
+            O Arduino Uno possui entradas analógicas que permitem medir diferentes níveis de tensão.
+          </p>
+          <p class="text-sm text-slate-300">
+            Utilizando <code class="px-1.5 py-0.5 bg-slate-950 text-teal-300 border border-slate-800 rounded font-mono text-xs">analogRead()</code>, podemos obter valores entre:
+          </p>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="bg-slate-950 text-xs uppercase text-teal-300 border-b border-slate-800">
+                <tr>
+                  <th scope="col" class="px-4 py-3 font-bold">Valor</th>
+                  <th scope="col" class="px-4 py-3 font-bold">Interpretação</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 bg-slate-950/40">
+                <tr>
+                  <td class="px-4 py-3 font-mono text-xs text-teal-300">Próximo de 0</td>
+                  <td class="px-4 py-3">Tensão baixa</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono text-xs text-teal-300">Próximo de 512</td>
+                  <td class="px-4 py-3">Tensão intermediária</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono text-xs text-teal-300">Próximo de 1023</td>
+                  <td class="px-4 py-3">Tensão alta</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
 
-          <div id="checklistContainer" class="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs md:text-sm"> -->
-            <!-- Gerado via JavaScript -->
-          <!-- </div>
+          <aside class="alerta-importante bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 text-sm text-amber-200" role="note">
+            <p>
+              <strong class="text-amber-300">Importante:</strong> Esses valores representam a tensão medida pelo Arduino, não diretamente a quantidade de luz.
+            </p>
+          </aside>
         </div>
-      </section> -->
+      </article>
 
-      <!-- SEÇÃO 14: AUTOAVALIAÇÃO COM CÁLCULO DE NÍVEL -->
-      <!-- <section id="sec-14" class="scroll-mt-24 space-y-6 mb-24">
-        <div class="flex items-center space-x-3">
-          <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
-            14
+      <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+            <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-teal-400"></i>
+                  Esquema de Ligação
+                </h3>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                  Pino analógico A0 + GND + 5v
+                </span>
+              </div>
+
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+                <img
+                  src="ldr.png"
+                  alt="Diagrama de ligação do LDR no pino analógico A0 e GND do Arduino"
+                  class="max-w-full h-auto rounded-lg"
+                >
+              </div>
+
+              <figcaption class="text-xs text-slate-400 text-center">
+                Conecte o terminal positivo (+) do LDR ao <strong class="text-slate-200">pino analógico A0</strong> o terminal negativo (–) ao <strong class="text-slate-200">GND</strong> terminal vcc (+) ao <strong class="text-slate-200">5V</strong>..
+              </figcaption>
+            </figure>
+
+
+      <!-- Lista de Experimentos e Desafios Sequenciais -->
+      <div class="space-y-6">
+
+        <!-- Seção 4: Primeiro Experimento -->
+        <article class="bloco-experimento bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4" aria-labelledby="titulo-exp-4">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Experimento</span>
+            <h3 id="titulo-exp-4" class="text-lg font-bold text-white">4. Primeiro Experimento — Descobrindo a luminosidade</h3>
           </div>
-          <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 12 — Autoavaliação</h2>
-        </div>
 
-        <div class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-6">
-          <p class="text-slate-300 text-sm">Responda com sinceridade para calcular seu nível de domínio:</p>
+          <p class="text-sm text-slate-300">
+            Antes de criar qualquer sistema automatizado, precisamos aprender a receber informações do sensor.
+          </p>
 
-          <div class="space-y-6" id="selfQuiz">
-             -->
-            <!-- Pergunta 1 -->
-            <!-- <div class="space-y-2">
-              <p class="text-sm font-bold text-white">1. Consigo explicar a diferença entre um dispositivo de entrada e de saída?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq1" value="3" class="text-teal-400">
-                  <span>Sim, consigo explicar e dar exemplos.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq1" value="2" class="text-teal-400">
-                  <span>Compreendi, mas tenho algumas dúvidas.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq1" value="1" class="text-teal-400">
-                  <span>Preciso revisar esse conteúdo.</span>
-                </label>
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-teal-300">Sua missão</h4>
+            <p class="text-sm text-slate-300">
+              Carregue o código abaixo no Arduino e observe os valores apresentados no Monitor Serial.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Código inicial</h4>
+            <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">const int</span> pinoLDR = <span class="text-teal-300">A0</span>;
+
+    <span class="text-purple-400">void</span> <span class="text-teal-400">setup</span>() {
+      <span class="text-teal-400">Serial.begin</span>(<span class="text-amber-300">9600</span>);
+    }
+
+    <span class="text-purple-400">void</span> <span class="text-teal-400">loop</span>() {
+      <span class="text-purple-400">int</span> luminosidade = <span class="text-teal-400">analogRead</span>(pinoLDR);
+      <span class="text-teal-400">Serial.println</span>(luminosidade);
+      <span class="text-teal-400">delay</span>(<span class="text-amber-300">500</span>);
+    }</code></pre>
+          </div>
+        </article>
+
+        <!-- Desafio 1 -->
+        <article class="bloco-desafio bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4" aria-labelledby="titulo-desafio-1">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 1</span>
+            <h3 id="titulo-desafio-1" class="text-lg font-bold text-white">Identificando ambientes claros e escuros</h3>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-teal-300">Situação-problema</h4>
+            <p class="text-sm text-slate-300">
+              Imagine que você precisa desenvolver um dispositivo capaz de identificar se um ambiente está claro ou escuro.
+            </p>
+            <p class="text-sm text-slate-300">
+              O Arduino deverá analisar os valores recebidos pelo LDR e apresentar uma mensagem no Monitor Serial.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Sua missão</h4>
+            <p class="text-sm text-slate-300">Modifique o código para que:</p>
+            <ol class="list-decimal list-inside space-y-1.5 text-sm text-slate-300">
+              <li>O Arduino realize a leitura do LDR.</li>
+              <li>Quando o valor for menor que 400, apresente a mensagem <code class="px-1.5 py-0.5 bg-slate-950 text-amber-200 border border-slate-800 rounded font-mono text-xs">"AMBIENTE ESCURO"</code>.</li>
+              <li>Quando o valor for maior ou igual a 400, apresente <code class="px-1.5 py-0.5 bg-slate-950 text-amber-200 border border-slate-800 rounded font-mono text-xs">"AMBIENTE ILUMINADO"</code>.</li>
+              <li>O sistema deverá atualizar as informações continuamente.</li>
+            </ol>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Dicas de programação</h4>
+            <ol class="list-decimal list-inside space-y-3 text-sm text-slate-300">
+              <li class="space-y-2">
+                <span>Criando uma condição:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">if</span> (luminosidade &lt; <span class="text-amber-300">400</span>) {
+      <span class="text-teal-400">Serial.println</span>(<span class="text-amber-200">"AMBIENTE ESCURO"</span>);
+    }</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Criando uma segunda possibilidade:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">else</span> {
+      <span class="text-teal-400">Serial.println</span>(<span class="text-amber-200">"AMBIENTE ILUMINADO"</span>);
+    }</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Realizando a leitura:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">int</span> luminosidade = <span class="text-teal-400">analogRead</span>(pinoLDR);</code></pre>
+              </li>
+            </ol>
+          </div>
+
+          <div class="caixa-perguntas bg-slate-950/70 border border-teal-500/30 rounded-xl p-4 space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Perguntas</h4>
+            <ul class="list-disc list-inside space-y-1 text-sm text-slate-300">
+              <li>O que significa o símbolo <code class="px-1.5 py-0.5 bg-slate-950 text-teal-300 border border-slate-800 rounded font-mono text-xs">&lt;</code>?</li>
+              <li>O que acontece quando o valor do sensor é exatamente 400?</li>
+              <li>Como podemos modificar o limite para identificar ambientes mais escuros?</li>
+            </ul>
+          </div>
+        </article>
+
+        <!-- Desafio 2 -->
+        <article class="bloco-desafio bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4" aria-labelledby="titulo-desafio-2">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 2</span>
+            <h3 id="titulo-desafio-2" class="text-lg font-bold text-white">Luminária automática</h3>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-teal-300">Situação-problema</h4>
+            <p class="text-sm text-slate-300">
+              Imagine que você precisa desenvolver uma luminária inteligente para uma residência.
+            </p>
+            <p class="text-sm text-slate-300">
+              A luminária deverá acender automaticamente quando o ambiente estiver escuro e apagar quando houver iluminação suficiente.
+            </p>
+            <p class="text-sm text-slate-300">Agora vamos adicionar um LED ao circuito.</p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Montagem adicional</h4>
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-950 text-xs uppercase text-teal-300 border-b border-slate-800">
+                  <tr>
+                    <th scope="col" class="px-4 py-3 font-bold">Componente</th>
+                    <th scope="col" class="px-4 py-3 font-bold">Conexão</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 bg-slate-950/40">
+                  <tr>
+                    <td class="px-4 py-3 font-medium text-white">Perna positiva do LED</td>
+                    <td class="px-4 py-3">Pino digital 3, utilizando resistor de 220 &Omega; em série</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-medium text-white">Perna negativa do LED</td>
+                    <td class="px-4 py-3 font-mono text-xs text-teal-300">GND</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Sua missão</h4>
+            <p class="text-sm text-slate-300">Modifique a programação para que:</p>
+            <ol class="list-decimal list-inside space-y-1.5 text-sm text-slate-300">
+              <li>O Arduino continue monitorando a luminosidade.</li>
+              <li>Quando o valor do LDR for menor que 400, o LED deverá acender.</li>
+              <li>Quando o valor for maior ou igual a 400, o LED deverá apagar.</li>
+              <li>O sistema deverá funcionar automaticamente.</li>
+            </ol>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Dicas de programação</h4>
+            <ol class="list-decimal list-inside space-y-3 text-sm text-slate-300">
+              <li class="space-y-2">
+                <span>Definindo o pino do LED:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">const int</span> pinoLED = <span class="text-amber-300">9</span>;</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Configurando o LED como saída:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-teal-400">pinMode</span>(pinoLED, <span class="text-teal-300">OUTPUT</span>);</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Acendendo o LED:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">HIGH</span>);</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Apagando o LED:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">LOW</span>);</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Estrutura condicional:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">if</span> (luminosidade &lt; <span class="text-amber-300">400</span>) {
+      <span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">HIGH</span>);
+    } <span class="text-purple-400">else</span> {
+      <span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">LOW</span>);
+    }</code></pre>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+        <!-- Desafio 3 -->
+        <article class="bloco-desafio bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4" aria-labelledby="titulo-desafio-3">
+          <div class="flex items-center space-x-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">Desafio 3</span>
+            <h3 id="titulo-desafio-3" class="text-lg font-bold text-white">Iluminação inteligente com três níveis</h3>
+          </div>
+
+          <div class="space-y-1">
+            <h4 class="text-sm font-bold text-teal-300">Situação-problema</h4>
+            <p class="text-sm text-slate-300">
+              Uma empresa deseja desenvolver um sistema de iluminação que consiga identificar diferentes níveis de luminosidade.
+            </p>
+            <p class="text-sm text-slate-300">
+              Diferentemente dos desafios anteriores, agora o sistema deverá apresentar três comportamentos.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Sua missão</h4>
+            <p class="text-sm text-slate-300">Programe o Arduino para apresentar os seguintes resultados:</p>
+            <div class="overflow-x-auto rounded-xl border border-slate-800">
+              <table class="w-full text-left text-sm text-slate-300">
+                <thead class="bg-slate-950 text-xs uppercase text-teal-300 border-b border-slate-800">
+                  <tr>
+                    <th scope="col" class="px-4 py-3 font-bold">Valor do LDR</th>
+                    <th scope="col" class="px-4 py-3 font-bold">Situação</th>
+                    <th scope="col" class="px-4 py-3 font-bold">Comportamento do LED</th>
+                  </tr>
+                </thead>
+                <tbody class="divide-y divide-slate-800 bg-slate-950/40">
+                  <tr>
+                    <td class="px-4 py-3 font-mono text-xs text-teal-300">Abaixo de 300</td>
+                    <td class="px-4 py-3">Muito escuro</td>
+                    <td class="px-4 py-3">LED piscando</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-mono text-xs text-teal-300">Entre 300 e 700</td>
+                    <td class="px-4 py-3">Luminosidade intermediária</td>
+                    <td class="px-4 py-3">LED aceso</td>
+                  </tr>
+                  <tr>
+                    <td class="px-4 py-3 font-mono text-xs text-teal-300">Acima de 700</td>
+                    <td class="px-4 py-3">Ambiente muito iluminado</td>
+                    <td class="px-4 py-3">LED apagado</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <div class="space-y-2">
+            <h4 class="text-sm font-bold text-teal-300">Dicas de programação</h4>
+            <ol class="list-decimal list-inside space-y-3 text-sm text-slate-300">
+              <li class="space-y-2">
+                <span>Primeira condição:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">if</span> (luminosidade &lt; <span class="text-amber-300">300</span>) {
+      <span class="text-slate-500">// LED piscando</span>
+    }</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Segunda condição:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">else if</span> (luminosidade &lt;= <span class="text-amber-300">700</span>) {
+      <span class="text-slate-500">// LED aceso</span>
+    }</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Terceira condição:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-purple-400">else</span> {
+      <span class="text-slate-500">// LED apagado</span>
+    }</code></pre>
+              </li>
+              <li class="space-y-2">
+                <span>Fazendo o LED piscar:</span>
+                <pre class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 overflow-x-auto"><code class="language-cpp"><span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">HIGH</span>);
+    <span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);
+    <span class="text-teal-400">digitalWrite</span>(pinoLED, <span class="text-teal-300">LOW</span>);
+    <span class="text-teal-400">delay</span>(<span class="text-amber-300">300</span>);</code></pre>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- =====================================================================
+     SEÇÃO 11: Sensor de Luz (LDR) e Alarmes Sonoros
+     ===================================================================== -->
+      <section id="sec-11" class="scroll-mt-24 space-y-8">
+
+        <!-- 1. Cabeçalho da Etapa -->
+        <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30 shrink-0">
+            8
+          </div>
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Prática Guiada</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Sensor de Luz (LDR) e Alarmes Sonoros</h2>
+          </div>
+        </header>
+
+        <!-- 2. Lista de Desafios Sequenciais (Mão na Massa) -->
+        <div class="space-y-6 pt-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white">Desafios Práticos</h3>
+            <span class="text-xs text-slate-400">Mão na Massa</span>
+          </div>
+
+                <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+            <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-teal-400"></i>
+                  Esquema de Ligação
+                </h3>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                  Pino analógico A0 + GND + 5v
+                </span>
               </div>
-            </div> -->
 
-            <!-- Pergunta 2 -->
-            <!-- <div class="space-y-2">
-              <p class="text-sm font-bold text-white">2. Consigo explicar como o Arduino lê o botão e decide acionar o LED?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq2" value="3" class="text-teal-400">
-                  <span>Sim, consigo explicar todo o fluxo.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq2" value="2" class="text-teal-400">
-                  <span>Compreendi parcialmente.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq2" value="1" class="text-teal-400">
-                  <span>Ainda preciso de ajuda.</span>
-                </label>
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+                <img
+                  src="ldrbuzzer.png"
+                  alt="Diagrama de ligação do LDR no pino analógico A0 e GND do Arduino"
+                  class="max-w-full h-auto rounded-lg"
+                >
               </div>
-            </div> -->
 
-            <!-- Pergunta 3 -->
-            <!-- <div class="space-y-2">
-              <p class="text-sm font-bold text-white">3. Consigo modificar o código sem apenas copiar exemplos?</p>
-              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs">
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq3" value="3" class="text-teal-400">
-                  <span>Sim, realizo e testo alterações solo.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq3" value="2" class="text-teal-400">
-                  <span>Faço alterações com orientação.</span>
-                </label>
-                <label class="p-3 bg-slate-950 border border-slate-800 rounded-xl cursor-pointer hover:border-teal-500 flex items-center space-x-2">
-                  <input type="radio" name="sq3" value="1" class="text-teal-400">
-                  <span>Preciso de ajuda para alterar código.</span>
-                </label>
-              </div>
+              <figcaption class="text-xs text-slate-400 text-center">
+                Conecte o terminal positivo (+) do LDR ao <strong class="text-slate-200">pino analógico A0</strong> o terminal negativo (–) ao <strong class="text-slate-200">GND</strong> terminal vcc (+) ao <strong class="text-slate-200">5V</strong>..
+              </figcaption>
+            </figure>
+
+          <!-- Desafio 1 -->
+          <article id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+                Desafio 1
+              </span>
+              <h4 class="text-xl font-bold text-white">Alarme automático de escuridão</h4>
             </div>
 
-          </div> -->
-
-          <!-- Resultado do Quiz -->
-          <!-- <div id="quizScoreBox" class="hidden p-4 rounded-xl bg-teal-500/10 border border-teal-500/30 flex items-center justify-between">
-            <div>
-              <span class="text-xs uppercase font-bold text-teal-400 block">Seu Nível de Domínio:</span>
-              <span id="quizBadge" class="text-lg font-extrabold text-white">Mestre dos Circuitos 🚀</span>
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+              <p class="text-slate-300 leading-relaxed">
+                Imagine que você precisa construir um sistema de segurança para um ambiente. Quando o local ficar escuro, o Arduino deverá identificar a mudança de luminosidade e emitir um sinal sonoro.
+              </p>
             </div>
-            <div id="quizPercent" class="text-2xl font-black text-teal-300">100%</div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Sua missão</h5>
+              <p class="text-slate-300 text-sm">Modifique o código para que:</p>
+              <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
+                <li>O Arduino faça a leitura constante do <strong class="text-white">LDR</strong>.</li>
+                <li>Quando a luminosidade estiver <strong class="text-white">abaixo de 400</strong>, o buzzer deverá emitir um som.</li>
+                <li>O buzzer deverá tocar com frequência de <strong class="text-white">2000 Hz</strong>.</li>
+                <li>Quando a luminosidade voltar a ficar acima do limite, o buzzer deverá parar.</li>
+                <li>O sistema deverá funcionar continuamente.</li>
+              </ol>
+            </div>
+
+            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Dicas de programação</h5>
+              <ol class="list-decimal list-inside space-y-3 text-slate-300 text-sm">
+                <li>
+                  Criando a condição para identificar pouca luminosidade:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">if</span> (luminosidade &lt; <span class="text-emerald-400">400</span>) {
+  
+                }</code></pre>
+                </li>
+                <li>
+                  Fazendo o buzzer emitir um som:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>);</code></pre>
+                </li>
+                <li>
+                  Interrompendo o som:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">noTone</span>(pinoBuzzer);</code></pre>
+                </li>
+              </ol>
+            </div>
+
+            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Dicas de programação</h5>
+              <ol class="list-decimal list-inside space-y-3 text-slate-300 text-sm">
+                <li>
+                  Declarando os pinos dos componentes (LDR e Buzzer):
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">const int</span> pinoLDR = <span class="text-emerald-400">A0</span>;      <span class="text-slate-500">// Pino analógico do Módulo LDR</span>
+<span class="text-cyan-400">const int</span> pinoBuzzer = <span class="text-emerald-400">5</span>;   <span class="text-slate-500">// Pino digital do Buzzer</span></code></pre>
+                </li>
+                <li>
+                  Configurando os pinos de entrada/saída e a comunicação serial:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">void</span> <span class="text-amber-400">setup</span>() {
+  <span class="text-amber-400">pinMode</span>(pinoLDR, <span class="text-emerald-400">INPUT</span>);
+  <span class="text-amber-400">pinMode</span>(pinoBuzzer, <span class="text-emerald-400">OUTPUT</span>);
+  <span class="text-amber-400">Serial.begin</span>(<span class="text-emerald-400">9600</span>);
+}</code></pre>
+                </li>
+                <li>
+                  Realizando a leitura da luminosidade e exibindo no Monitor Serial:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">int</span> leituraLuz = <span class="text-amber-400">analogRead</span>(pinoLDR);
+<span class="text-amber-400">Serial.println</span>(leituraLuz);</code></pre>
+                </li>
+                <li>
+                  Criando a condição para identificar pouca luminosidade:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-slate-500">// No módulo LDR do Wokwi, valores maiores indicam menos luz (escuro)</span>
+<span class="text-cyan-400">if</span> (leituraLuz &gt; <span class="text-emerald-400">500</span>) {
+  
+} <span class="text-cyan-400">else</span> {
+  
+}</code></pre>
+                </li>
+                <li>
+                  Fazendo o buzzer emitir um som:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">1000</span>); <span class="text-slate-500">// Emite som de 1000 Hz</span></code></pre>
+                </li>
+                <li>
+                  Interrompendo o som:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">noTone</span>(pinoBuzzer);      <span class="text-slate-500">// Desliga o som</span></code></pre>
+                </li>
+                <li>
+                  Adicionando uma pequena pausa no <code>loop()</code> para estabilizar as leituras:
+                  <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">delay</span>(<span class="text-emerald-400">100</span>);</code></pre>
+                </li>
+              </ol>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+      <!-- =====================================================================
+     SEÇÃO 12: Sistema de Detecção de Vibração e Segurança (SW-420)
+     ===================================================================== -->
+    <section id="sec-12" class="scroll-mt-24 space-y-8">
+
+      <!-- 1. Cabeçalho da Etapa -->
+      <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+        <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30 shrink-0">
+          9
+        </div>
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Prática Guiada • Novo Componente: Sensor de Vibração Tilt SW-420</span>
+          <h2 class="text-2xl md:text-3xl font-bold text-white">Sistema de Detecção de Vibração e Segurança</h2>
+        </div>
+      </header>
+
+   
+      <!-- 2. Conhecendo o Novo Componente -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-800 pb-4">
+          <div class="flex items-center gap-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+              Novo Componente
+            </span>
+            <h3 class="text-xl font-bold text-white">Conhecendo o novo componente: SW-420</h3>
+          </div>
+          <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+            Sensor Tilt SW-420
+          </span>
+        </div>
+
+        <div class="space-y-2 text-slate-300 leading-relaxed">
+          <p>
+            O <strong class="text-white">SW-420</strong> é um sensor utilizado para identificar vibrações e movimentos bruscos.
+          </p>
+          <p>
+            Ele possui um mecanismo interno que identifica vibrações e um circuito eletrônico que transforma essa detecção em um <strong class="text-white">sinal digital</strong>.
+          </p>
+        </div>
+
+        <!-- Tabela de Pinagem -->
+        <div class="space-y-2">
+          <p class="text-sm text-slate-300">O módulo geralmente possui três pinos:</p>
+          <div class="overflow-x-auto rounded-xl border border-slate-800">
+            <table class="w-full text-left text-sm text-slate-300">
+              <thead class="bg-slate-950 text-xs uppercase tracking-wider text-teal-400 border-b border-slate-800">
+                <tr>
+                  <th scope="col" class="px-4 py-3 font-semibold">Pino</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Função</th>
+                  <th scope="col" class="px-4 py-3 font-semibold">Conexão</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-800 bg-slate-900/50">
+                <tr>
+                  <td class="px-4 py-3 font-mono font-bold text-white">VCC</td>
+                  <td class="px-4 py-3">Alimentação</td>
+                  <td class="px-4 py-3 font-mono text-emerald-400">5V do Arduino</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono font-bold text-white">GND</td>
+                  <td class="px-4 py-3">Terra</td>
+                  <td class="px-4 py-3 font-mono text-emerald-400">GND do Arduino</td>
+                </tr>
+                <tr>
+                  <td class="px-4 py-3 font-mono font-bold text-white">DO</td>
+                  <td class="px-4 py-3">Saída digital</td>
+                  <td class="px-4 py-3 font-mono text-emerald-400">Pino digital 2</td>
+                </tr>
+              </tbody>
+            </table>
           </div>
         </div>
-      </section> 
 
-    </main>
-  </div>
+        <!-- Como funciona -->
+        <div class="space-y-2">
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Como funciona?</h4>
+          <ul class="list-disc list-inside space-y-1.5 text-slate-300">
+            <li>Quando o sensor está parado, apresenta um estado lógico.</li>
+            <li>Quando identifica uma vibração, seu estado lógico pode mudar.</li>
+            <li>O Arduino identifica essa mudança e executa uma ação programada.</li>
+          </ul>
+          <p class="text-slate-300 text-sm pt-1">
+            O módulo possui um <strong class="text-white">potenciômetro</strong> que permite ajustar sua sensibilidade.
+          </p>
+        </div>
 
-  // TOAST NOTIFICATION 
-  <div id="toast" class="fixed bottom-5 right-5 z-50 bg-teal-500 text-slate-950 font-bold px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-2 translate-y-20 opacity-0 transition-all duration-300 pointer-events-none">
-    <i class="fa-solid fa-check-circle text-lg"></i>
-    <span id="toastMsg">Código copiado com sucesso!</span>
-  </div>  -->
+        <!-- Alerta de Atenção -->
+        <div class="bg-amber-500/10 border border-amber-500/30 rounded-xl p-4 flex items-start gap-3">
+          <i class="fa-solid fa-triangle-exclamation text-amber-400 mt-0.5"></i>
+          <p class="text-sm text-amber-200 leading-relaxed">
+            <strong class="text-amber-400">Atenção:</strong> A saída digital pode apresentar nível <code class="font-mono text-white">HIGH</code> ou <code class="font-mono text-white">LOW</code> conforme o módulo e o ajuste de sensibilidade. Por isso, antes de desenvolver os desafios, precisamos identificar qual estado representa a detecção de vibração.
+          </p>
+        </div>
+      </article>
+
+      <!-- 3. Montagem do Circuito -->
+      
+                     <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+            <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-teal-400"></i>
+                  Esquema de Ligação
+                </h3>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                  Pino analógico A0 + GND + 5v
+                </span>
+              </div>
+
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+                <img
+                  src="Tilt.png"
+                  alt="Diagrama de ligação do SW-420 no pino analógico A0 e GND do Arduino"
+                  class="max-w-full h-auto rounded-lg"
+                >
+              </div>
+
+              <figcaption class="text-xs text-slate-400 text-center">
+                Conecte o terminal positivo (+) do SW-420 ao <strong class="text-slate-200">pino analógico A0</strong> o terminal negativo (–) ao <strong class="text-slate-200">GND</strong> terminal vcc (+) ao <strong class="text-slate-200">5V</strong>..
+              </figcaption>
+            </figure>
+
+      <!-- 4. Primeiro Experimento -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+        <div class="flex flex-wrap items-center gap-3">
+          <span class="px-3 py-1 bg-cyan-500/20 text-cyan-300 border border-cyan-500/30 rounded-lg text-xs font-bold">
+            Calibração e Teste
+          </span>
+          <h3 class="text-xl font-bold text-white">Primeiro experimento – Testando o sensor de vibração</h3>
+        </div>
+
+        <p class="text-slate-300 leading-relaxed">
+          Antes de começar os desafios, precisamos verificar se o sensor está funcionando.
+        </p>
+
+        <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Código de teste</h4>
+          <pre class="bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">const int</span> pinoVibracao = <span class="text-emerald-400">2</span>;
+
+    <span class="text-cyan-400">void</span> <span class="text-amber-400">setup</span>() {
+      <span class="text-amber-400">pinMode</span>(pinoVibracao, <span class="text-emerald-400">INPUT</span>);
+      <span class="text-amber-400">Serial.begin</span>(<span class="text-emerald-400">9600</span>);
+    }
+
+    <span class="text-cyan-400">void</span> <span class="text-amber-400">loop</span>() {
+      <span class="text-cyan-400">int</span> estado = <span class="text-amber-400">digitalRead</span>(pinoVibracao);
+
+      <span class="text-cyan-400">if</span> (estado == <span class="text-emerald-400">LOW</span>) {
+        <span class="text-amber-400">Serial.println</span>(<span class="text-emerald-300">"VIBRACAO DETECTADA!"</span>);
+      } <span class="text-cyan-400">else</span> {
+        <span class="text-amber-400">Serial.println</span>(<span class="text-emerald-300">"Sensor parado"</span>);
+      }
+
+      <span class="text-amber-400">delay</span>(<span class="text-emerald-400">100</span>);
+    }</code></pre>
+        </div>
+      </article>
+
+      <!-- 5. Lista de Desafios Sequenciais (Mão na Massa) -->
+      <div class="space-y-6 pt-2">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xl font-bold text-white">Desafios Práticos</h3>
+          <span class="text-xs text-slate-400">Mão na Massa</span>
+        </div>
+
+        <!-- Desafio 1 -->
+        <article id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+              Desafio 1
+            </span>
+            <h4 class="text-xl font-bold text-white">Alarme contra impactos</h4>
+          </div>
+
+          <div class="space-y-2">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+            <p class="text-slate-300 leading-relaxed">
+              Imagine que você precisa desenvolver um sistema de segurança para proteger uma caixa que contém objetos importantes. Caso alguém tente abrir, movimentar ou bater na caixa, o sensor deverá identificar a vibração e acionar um alarme.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Sua missão</h5>
+            <p class="text-slate-300 text-sm">Modifique a programação para que:</p>
+            <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
+              <li>O Arduino monitore constantemente o sensor <strong class="text-white">SW-420</strong>.</li>
+              <li>Quando uma vibração for detectada, o <strong class="text-white">LED deverá acender</strong>.</li>
+              <li>O buzzer deverá emitir um som de <strong class="text-white">2000 Hz</strong>.</li>
+              <li>O alarme deverá permanecer ativo durante <strong class="text-white">2 segundos</strong>.</li>
+              <li>Após esse período, o LED deverá apagar e o buzzer deverá parar.</li>
+              <li>O sistema deverá continuar monitorando novas vibrações.</li>
+            </ol>
+          </div>
+
+          <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Dicas de programação</h5>
+            <ol class="list-decimal list-inside space-y-3 text-slate-300 text-sm">
+              <li>
+                Identificando a vibração:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">if</span> (<span class="text-amber-400">digitalRead</span>(pinoVibracao) == <span class="text-emerald-400">LOW</span>) {
+
+    }</code></pre>
+              </li>
+              <li>
+                Acendendo o LED:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">digitalWrite</span>(pinoLED, <span class="text-emerald-400">HIGH</span>);</code></pre>
+              </li>
+              <li>
+                Emitindo o som:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>);</code></pre>
+              </li>
+              <li>
+                Mantendo o alarme ativo por 2 segundos:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">delay</span>(<span class="text-emerald-400">2000</span>);</code></pre>
+              </li>
+              <li>
+                Desligando os componentes:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">digitalWrite</span>(pinoLED, <span class="text-emerald-400">LOW</span>);
+    <span class="text-amber-400">noTone</span>(pinoBuzzer);</code></pre>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+        <!-- Desafio 2 -->
+        <article id="c2-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+          <div class="flex flex-wrap items-center gap-3">
+            <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+              Desafio 2
+            </span>
+            <h4 class="text-xl font-bold text-white">Cofre eletrônico com proteção por luminosidade</h4>
+          </div>
+
+          <div class="space-y-2">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+            <p class="text-slate-300 leading-relaxed">
+              Imagine que você precisa construir um sistema de segurança para um pequeno cofre. O sistema deverá permanecer ativado quando o ambiente estiver escuro. Caso alguém tente movimentar ou abrir o cofre, o sensor SW-420 identificará a vibração e acionará o alarme.
+            </p>
+            <p class="text-slate-300 leading-relaxed">
+              Agora você utilizará <strong class="text-white">dois sensores diferentes</strong> para controlar o mesmo sistema.
+            </p>
+          </div>
+
+          <div class="space-y-2">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Sua missão</h5>
+            <p class="text-slate-300 text-sm">Programe o Arduino para:</p>
+            <ol class="list-decimal list-inside space-y-1.5 text-slate-300">
+              <li>Fazer a leitura constante do <strong class="text-white">LDR</strong>.</li>
+              <li>Identificar quando o ambiente estiver escuro (<strong class="text-white">luminosidade abaixo de 400</strong>).</li>
+              <li>Quando estiver escuro, o sistema deverá ficar em estado de segurança.</li>
+              <li>
+                Se o sensor <strong class="text-white">SW-420</strong> detectar uma vibração enquanto o ambiente estiver escuro:
+                <ul class="list-disc list-inside pl-5 mt-1 space-y-1 text-slate-300">
+                  <li>Acender o <strong class="text-white">LED</strong>.</li>
+                  <li>Acionar o buzzer com frequência de <strong class="text-white">2500 Hz</strong>.</li>
+                </ul>
+              </li>
+              <li>Quando o ambiente estiver iluminado, o sistema deverá permanecer desativado.</li>
+            </ol>
+          </div>
+
+          <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+            <h5 class="text-sm font-semibold uppercase tracking-wider text-amber-400">Dicas de programação</h5>
+            <ol class="list-decimal list-inside space-y-3 text-slate-300 text-sm">
+              <li>
+                Fazendo a leitura dos dois sensores:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">int</span> luminosidade = <span class="text-amber-400">analogRead</span>(pinoLDR);
+    <span class="text-cyan-400">int</span> vibracao = <span class="text-amber-400">digitalRead</span>(pinoVibracao);</code></pre>
+              </li>
+              <li>
+                Verificando se o ambiente está escuro:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">if</span> (luminosidade &lt; <span class="text-emerald-400">400</span>) {
+
+    }</code></pre>
+              </li>
+              <li>
+                Verificando simultaneamente a vibração:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-cyan-400">if</span> (luminosidade &lt; <span class="text-emerald-400">400</span> &amp;&amp; vibracao == <span class="text-emerald-400">LOW</span>) {
+
+    }</code></pre>
+                <p class="mt-2 text-xs text-slate-400 bg-slate-900 border border-slate-800 rounded-lg p-2.5">
+                  Observe o operador <code class="text-cyan-400 font-mono font-bold">&amp;&amp;</code>: ele significa <strong class="text-white">E</strong>. Portanto, as duas condições precisam ser verdadeiras para executar o comando.
+                </p>
+              </li>
+              <li>
+                Acionando o alarme:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">digitalWrite</span>(pinoLED, <span class="text-emerald-400">HIGH</span>);
+    <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2500</span>);</code></pre>
+              </li>
+              <li>
+                Desativando o alarme:
+                <pre class="mt-2 bg-slate-950 border border-slate-800/80 rounded-lg p-3 text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code><span class="text-amber-400">digitalWrite</span>(pinoLED, <span class="text-emerald-400">LOW</span>);
+    <span class="text-amber-400">noTone</span>(pinoBuzzer);</code></pre>
+              </li>
+            </ol>
+          </div>
+        </article>
+
+      </div>
+
+    </section>
+
+      
 
   <!-- JAVASCRIPT LÓGICA COMPLETA -->
   <script>
@@ -1514,6 +2112,7 @@
         valPin2.innerText = '0V (LOW)';
         valPin2.className = 'text-xs font-mono font-bold text-slate-400';
       }
+    }
 
 
     function setLedState(turnOn) {
