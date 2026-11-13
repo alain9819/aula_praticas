@@ -159,7 +159,7 @@
             </a>
 
             <a href="#sec-8" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">8. Etapa 6 — Simulação</span>
+              <span class="truncate">8. Etapa 6 — Acionando o LED com botão</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-9" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
@@ -167,23 +167,23 @@
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-10" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">10. Etapa 8 — Investigando Erros</span>
+              <span class="truncate">10. Etapa 8 — Acionando o Buzzer Piezo</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-11" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">11. Etapa 9 — Desafio Final</span>
+              <span class="truncate">11. Etapa 9 — Sensor de Luz (LDR)</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-12" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">12. Etapa 10 — Relatório</span>
+              <span class="truncate">12. Etapa 10 — Musica com Buzzer</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-13" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">13. Checklist Aprendizagem</span>
+              <span class="truncate">13. Sensor de luz (LDR) com Buzzer</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
             <a href="#sec-14" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
-              <span class="truncate">14. Autoavaliação</span>
+              <span class="truncate">14. Sensor Tilt</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
           </nav>
@@ -816,7 +816,7 @@
 
 
       <!-- SEÇÃO 9: ETAPA - DESAFIOS DE PROGRAMAÇÃO -->
-      <section id="sec-9" class="scroll-mt-24 space-y-6">
+      <section id="sec-8" class="scroll-mt-24 space-y-6">
         <div class="flex items-center space-x-3">
           <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
             9
@@ -892,7 +892,7 @@
       <!-- =====================================================================
      SEÇÃO 10: Buzzer Piezo (Etapa 6)
      ===================================================================== -->
-      <section id="sec-10" class="scroll-mt-24 space-y-8">
+      <section id="sec-9" class="scroll-mt-24 space-y-8">
 
         <!-- 1. Cabeçalho da Etapa -->
         <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
@@ -1139,11 +1139,10 @@
       </section>
 
       <!-- =====================================================================
-     CONTINUAÇÃO DO MATERIAL DIDÁTICO: PRIMEIROS PASSOS COM O SENSOR LDR
-     Estilizado com Tailwind CSS no padrão visual da Seção 9
+     PRIMEIROS PASSOS COM O SENSOR LDR
      ===================================================================== -->
 
-    <section id="sec-ldr" class="modulo-ldr scroll-mt-24 space-y-6" aria-labelledby="titulo-ldr">
+    <section id="sec-10" class="modulo-ldr scroll-mt-24 space-y-6" aria-labelledby="titulo-ldr">
       <!-- Cabeçalho da Seção -->
       <header class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-xl bg-arduino/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30">
@@ -1504,11 +1503,148 @@
 
       </div>
     </section>
-
-    <!-- =====================================================================
-     SEÇÃO 11: Sensor de Luz (LDR) e Alarmes Sonoros
+      <!-- =====================================================================
+     SEÇÃO 10: Buzzer Piezo (Etapa 6)
      ===================================================================== -->
       <section id="sec-11" class="scroll-mt-24 space-y-8">
+
+        <!-- 1. Cabeçalho da Etapa -->
+        <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+          <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30 shrink-0">
+            7
+          </div>
+          <div>
+            <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">Prática Guiada</span>
+            <h2 class="text-2xl md:text-3xl font-bold text-white">Etapa 6 — Acionando o Buzzer Piezo</h2>
+          </div>
+        </header>
+
+        <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+        <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-teal-400"></i>
+              Esquema de Ligação
+            </h3>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+              Pino Digital 8 + GND
+            </span>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+            <img
+              src="tone.png"
+              alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
+              class="max-w-full h-auto rounded-lg"
+            >
+          </div>
+
+          <figcaption class="text-xs text-slate-400 text-center">
+            Conecte o terminal positivo (+) do buzzer ao <strong class="text-slate-200">pino digital 8</strong> e o terminal negativo (–) ao <strong class="text-slate-200">GND</strong>.
+          </figcaption>
+        </figure>
+
+        <!-- 3. Bloco de Código-Base -->
+        <div class="space-y-3">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <h3 class="text-lg font-semibold text-white">Código-Base (Arduino IDE)</h3>
+            <p class="text-sm text-slate-400">Copie e carregue o código C++ abaixo na sua placa.</p>
+          </div>
+
+          <div class="bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl">
+            <!-- Barra superior estilo editor -->
+            <div class="bg-slate-800/80 px-4 py-3 flex items-center justify-between border-b border-slate-700/80">
+              <div class="flex items-center space-x-2">
+                <span class="w-3 h-3 rounded-full bg-red-500"></span>
+                <span class="w-3 h-3 rounded-full bg-yellow-500"></span>
+                <span class="w-3 h-3 rounded-full bg-green-500"></span>
+                <span class="text-xs font-mono text-slate-300 ml-2">BUZZER.ino</span>
+              </div>
+
+              <button
+                id="copyCodeBtn"
+                type="button"
+                aria-label="Copiar código Arduino"
+                class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600 text-teal-300 text-xs font-medium transition-colors flex items-center space-x-2 cursor-pointer"
+              >
+                <i class="fa-regular fa-copy"></i>
+                <span>Copiar código</span>
+              </button>
+            </div>
+
+            <!-- Área do Código (sem tags <p> ou <br> internas para preservar a cópia limpa) -->
+            <div class="bg-slate-950 p-5">
+              <pre class="text-xs md:text-sm font-mono overflow-x-auto text-slate-200 leading-relaxed"><code id="mainArduinoCode"><span class="text-slate-500">// PROJETO: BUZZER</span>
+      <span class="text-cyan-400">const int</span> Buzzer = <span class="text-emerald-400">8</span>; <span class="text-slate-500">// Conecte o pino positivo do buzzer no pino digital 8</span>
+
+      <span class="text-cyan-400">void</span> <span class="text-amber-400">setup</span>() {
+        <span class="text-amber-400">pinMode</span>(Buzzer, <span class="text-cyan-300">OUTPUT</span>);
+
+      }
+
+      <span class="text-cyan-400">void</span> <span class="text-amber-400">loop</span>() {
+        <span class="text-slate-500">// Exemplo gerando bipes contínuos</span>
+        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">200</span>);             <span class="text-slate-500">// Pausa de 500ms</span>
+        <span class="text-amber-400">noTone</span>(pinoBuzzer);        <span class="text-slate-500">// Para o som (opcional se a duração já parou)</span>
+       
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">1000</span>);
+      }</code></pre>
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. Lista de Desafios Sequenciais (Mão na Massa) -->
+        <div class="space-y-6 pt-2">
+          <div class="flex items-center justify-between">
+            <h3 class="text-xl font-bold text-white">Desafios Práticos</h3>
+            <span class="text-xs text-slate-400">3 níveis progressivos</span>
+          </div>
+
+          <!-- Desafio 1 -->
+          <article id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+            <div class="flex flex-wrap items-center gap-3">
+              <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+                Desafio 1
+              </span>
+              <h4 class="text-xl font-bold text-white">Trecho Musical</h4>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">Situação-problema</h5>
+              <p class="text-slate-300 leading-relaxed">
+              Sabendo as frequências da escala musical:
+              <ol>
+                <li>Dó - 261 Hz</li>
+                <li>Ré - 293 Hz</li>
+                <li>Mi - 329 Hz</li>
+                <li>Fá - 349 Hz</li>
+                <li>Sol - 392 Hz</li>
+                </li>Lá - 440 Hz</li>
+                <li>Si - 494 Hz</li>
+              </ol>
+            </div>
+
+            <div class="space-y-2">
+              <h5 class="text-sm font-semibold uppercase tracking-wider text-teal-400">O que você deverá fazer</h5>
+              <ol>
+                <li>Faça o Buzzer tocar o seguinte trecho: </li>
+                <li>sol la sol mi</li>
+                <li>sol la sol mi</li>
+                <li>Re Re Do</li>
+                <li>Do Do sol</li>
+              </ol>
+            </div>
+
+          </article>
+
+        </div>
+
+      </section>
+    <!-- =====================================================================
+     SEÇÃO 12: Sensor de Luz (LDR) e Alarmes Sonoros
+     ===================================================================== -->
+      <section id="sec-12" class="scroll-mt-24 space-y-8">
 
         <!-- 1. Cabeçalho da Etapa -->
         <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
@@ -1654,7 +1790,7 @@
       <!-- =====================================================================
      SEÇÃO 12: Sistema de Detecção de Vibração e Segurança (SW-420)
      ===================================================================== -->
-    <section id="sec-12" class="scroll-mt-24 space-y-8">
+    <section id="sec-13" class="scroll-mt-24 space-y-8">
 
       <!-- 1. Cabeçalho da Etapa -->
       <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
