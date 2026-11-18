@@ -161,6 +161,10 @@
               <span class="truncate">8. Sensor Tilt</span>
               <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
             </a>
+            <a href="#sec-9" class="toc-link flex items-center justify-between px-3 py-2 rounded-xl text-slate-300 hover:bg-slate-800 hover:text-white transition-all">
+              <span class="truncate">9. Desafio Musical com LDR</span>
+              <i class="fa-solid fa-circle-check text-xs text-slate-600 status-icon"></i>
+            </a>
 
           </nav>
         </div>
@@ -1966,6 +1970,540 @@
 
     </section>
 
+    <!-- SEÇÃO 9: DESAFIO MUSICAL COM LDR -->
+    <section id="sec-9" class="scroll-mt-24 space-y-8">
+
+      <!-- CABEÇALHO -->
+      <header class="flex items-center space-x-3 border-b border-slate-800 pb-4">
+
+        <div class="w-10 h-10 rounded-xl bg-teal-500/20 text-teal-400 flex items-center justify-center font-bold text-lg border border-teal-500/30 shrink-0">
+          9
+        </div>
+
+        <div>
+          <span class="text-xs font-semibold uppercase tracking-wider text-teal-400">
+            Desafio Maker
+          </span>
+
+          <h2 class="text-2xl md:text-3xl font-bold text-white">
+            Maestro Maker – Complete a Música!
+          </h2>
+        </div>
+
+      </header>
+
+
+      <!-- APRESENTAÇÃO -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+
+        <h3 class="text-xl font-bold text-white">
+          🎵 O desafio musical
+        </h3>
+
+        <p class="text-slate-300 leading-relaxed">
+          Imagine que você precisa criar um jogo musical utilizando
+          Arduino, sensores LDR, LEDs e um buzzer. Sua missão será
+          completar uma música escolhida por você!
+        </p>
+
+        <p class="text-slate-300 leading-relaxed">
+          Para isso, a música deverá ser transformada em notas musicais
+          e dividida em três partes. Cada parte será reproduzida somente
+          quando você acionar o sensor LDR indicado pelo LED.
+        </p>
+
+        <div class="bg-slate-950 border border-slate-800 rounded-xl p-4">
+
+          <h4 class="text-sm font-bold text-teal-300 mb-3">
+            Como funciona o jogo?
+          </h4>
+
+          <ol class="list-decimal list-inside space-y-2 text-sm text-slate-300">
+
+            <li>O jogo inicia e acende o primeiro LED.</li>
+
+            <li>Você deve cobrir o LDR correspondente.</li>
+
+            <li>O buzzer reproduz a primeira parte da música.</li>
+
+            <li>O próximo LED acende, indicando o próximo sensor.</li>
+
+            <li>Você deverá repetir o processo até completar a música.</li>
+
+            <li>Ao finalizar, o Arduino reproduzirá a música completa!</li>
+
+          </ol>
+
+        </div>
+
+      </article>
+
+
+      <!-- ESQUEMA DE MONTAGEM -->
+      <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+
+        <div class="flex items-center justify-between">
+
+          <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+            <i class="fa-solid fa-microchip text-teal-400"></i>
+            Esquema de Ligação
+          </h3>
+
+          <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+            3 LDRs + 3 LEDs + Buzzer
+          </span>
+
+        </div>
+
+        <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+
+          <img
+            src="ldr-musical.png"
+            alt="Esquema de ligação de três sensores LDR, três LEDs e um buzzer no Arduino Uno"
+            class="max-w-full h-auto rounded-lg"
+          >
+
+        </div>
+
+        <figcaption class="text-xs text-slate-400 text-center">
+          Montagem do jogo musical com
+          <strong class="text-teal-300">Arduino, LDRs, LEDs e Buzzer</strong>.
+        </figcaption>
+
+        <div class="grid grid-cols-2 md:grid-cols-3 gap-3 text-xs">
+
+          <div class="bg-slate-950 rounded-lg p-3">
+            <strong class="text-teal-300">LDR 1</strong>
+            <p class="text-slate-400">Pino A0</p>
+          </div>
+
+          <div class="bg-slate-950 rounded-lg p-3">
+            <strong class="text-teal-300">LDR 2</strong>
+            <p class="text-slate-400">Pino A1</p>
+          </div>
+
+          <div class="bg-slate-950 rounded-lg p-3">
+            <strong class="text-teal-300">LDR 3</strong>
+            <p class="text-slate-400">Pino A2</p>
+          </div>
+
+          <div class="bg-slate-950 rounded-lg p-3">
+            <strong class="text-amber-300">LED 1, 2 e 3</strong>
+            <p class="text-slate-400">Pinos 8, 9 e 10</p>
+          </div>
+
+          <div class="bg-slate-950 rounded-lg p-3">
+            <strong class="text-amber-300">Buzzer</strong>
+            <p class="text-slate-400">Pino 5</p>
+          </div>
+
+        </div>
+
+      </figure>
+
+
+      <!-- MISSÃO PRINCIPAL -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+
+        <div class="flex flex-wrap items-center gap-3">
+
+          <span class="px-3 py-1 bg-teal-500/20 text-teal-300 border border-teal-500/30 rounded-lg text-xs font-bold">
+            Missão Principal
+          </span>
+
+          <h3 class="text-xl font-bold text-white">
+            Crie seu próprio jogo musical!
+          </h3>
+
+        </div>
+
+        <div class="space-y-2">
+
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-teal-400">
+            Situação-problema
+          </h4>
+
+          <p class="text-slate-300 leading-relaxed">
+            Você foi contratado para desenvolver um jogo musical
+            interativo. O desafio é transformar uma música conhecida
+            em uma sequência de notas que possa ser reproduzida pelo
+            buzzer do Arduino.
+          </p>
+
+          <p class="text-slate-300 leading-relaxed">
+            Entretanto, a música não poderá tocar automaticamente.
+            O jogador precisará completar cada trecho acionando
+            corretamente os sensores LDR indicados pelos LEDs.
+          </p>
+
+        </div>
+
+
+        <div class="space-y-2">
+
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-teal-400">
+            Sua missão
+          </h4>
+
+          <ol class="list-decimal list-inside space-y-2 text-slate-300 text-sm">
+
+            <li>
+              Escolha uma música que você gostaria de transformar em jogo.
+            </li>
+
+            <li>
+              Pesquise ou identifique as notas musicais que compõem sua melodia.
+            </li>
+
+            <li>
+              Transforme as notas em frequências utilizando a tabela musical.
+            </li>
+
+            <li>
+              Divida a música em três partes.
+            </li>
+
+            <li>
+              Adicione as notas e seus respectivos tempos no código.
+            </li>
+
+            <li>
+              Configure os LEDs para indicar qual LDR deverá ser acionado.
+            </li>
+
+            <li>
+              Faça cada acionamento reproduzir somente a parte correspondente da música.
+            </li>
+
+            <li>
+              Ao completar as três partes, reproduza a música inteira.
+            </li>
+
+          </ol>
+
+        </div>
+
+
+        <!-- TABELA DE NOTAS -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-3">
+
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-amber-400">
+            Tabela de frequências musicais
+          </h4>
+
+          <p class="text-xs text-slate-400">
+            Utilize esta tabela para transformar as notas musicais
+            em valores que o Arduino consegue reproduzir.
+          </p>
+
+          <div class="overflow-x-auto">
+
+            <table class="w-full text-sm text-center">
+
+              <thead class="text-teal-300 border-b border-slate-700">
+
+                <tr>
+                  <th class="p-2">Nota</th>
+                  <th class="p-2">Frequência</th>
+                  <th class="p-2">Código</th>
+                </tr>
+
+              </thead>
+
+              <tbody class="text-slate-300">
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Dó</td>
+                  <td>262 Hz</td>
+                  <td class="text-amber-300">DO4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Ré</td>
+                  <td>294 Hz</td>
+                  <td class="text-amber-300">RE4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Mi</td>
+                  <td>330 Hz</td>
+                  <td class="text-amber-300">MI4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Fá</td>
+                  <td>349 Hz</td>
+                  <td class="text-amber-300">FA4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Sol</td>
+                  <td>392 Hz</td>
+                  <td class="text-amber-300">SOL4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Lá</td>
+                  <td>440 Hz</td>
+                  <td class="text-amber-300">LA4</td>
+                </tr>
+
+                <tr class="border-b border-slate-800">
+                  <td class="p-2">Si</td>
+                  <td>494 Hz</td>
+                  <td class="text-amber-300">SI4</td>
+                </tr>
+
+                <tr>
+                  <td class="p-2">Dó agudo</td>
+                  <td>523 Hz</td>
+                  <td class="text-amber-300">DO5</td>
+                </tr>
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+
+        <!-- DICAS DE PROGRAMAÇÃO -->
+        <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 space-y-4">
+
+          <h4 class="text-sm font-semibold uppercase tracking-wider text-amber-400">
+            Dicas de programação
+          </h4>
+
+          <ol class="list-decimal list-inside space-y-4 text-slate-300 text-sm">
+
+            <li>
+
+              <strong class="text-white">
+                Declarando os pinos dos sensores:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>const int ldr1 = A0;
+    const int ldr2 = A1;
+    const int ldr3 = A2;</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Declarando os LEDs indicadores:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>const int led1 = 8;
+    const int led2 = 9;
+    const int led3 = 10;</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Declarando as notas musicais:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>#define DO4 262
+    #define RE4 294
+    #define MI4 330
+    #define FA4 349
+    #define SOL4 392</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Criando uma parte da música:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>int musica1[] = {
+      MI4, MI4, FA4, SOL4
+    };
+
+    int tempo1[] = {
+      400, 400, 400, 400
+    };</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Indicando o sensor correto:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>digitalWrite(led1, HIGH);
+
+    if (analogRead(ldr1) &lt; limiteLuz) {
+
+      tocarMusica(musica1, tempo1, 4);
+
+    }</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Reproduzindo uma nota musical:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>tone(buzzer, MI4);
+    delay(400);
+    noTone(buzzer);</code></pre>
+
+            </li>
+
+
+            <li>
+
+              <strong class="text-white">
+                Reproduzindo a música completa:
+              </strong>
+
+              <pre class="mt-2 bg-slate-950 border border-slate-800 rounded-lg p-3 text-xs font-mono overflow-x-auto"><code>tocarMusica(musica1, tempo1, 4);
+    tocarMusica(musica2, tempo2, 4);
+    tocarMusica(musica3, tempo3, 4);</code></pre>
+
+            </li>
+
+          </ol>
+
+        </div>
+
+      </article>
+
+
+      <!-- DESAFIOS EXTRAS -->
+      <article class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
+
+        <div class="flex items-center gap-3">
+
+          <span class="px-3 py-1 bg-amber-500/20 text-amber-300 border border-amber-500/30 rounded-lg text-xs font-bold">
+            Desafios Extras
+          </span>
+
+          <h3 class="text-xl font-bold text-white">
+            Evoluindo o jogo
+          </h3>
+
+        </div>
+
+        <div class="space-y-3">
+
+          <div class="border-l-2 border-teal-400 pl-4">
+
+            <h4 class="font-bold text-teal-300">
+              Desafio 1 – Aumentando a dificuldade
+            </h4>
+
+            <p class="text-sm text-slate-300">
+              Adicione mais notas em cada parte da música e aumente
+              a quantidade de etapas necessárias para completá-la.
+            </p>
+
+          </div>
+
+
+          <div class="border-l-2 border-teal-400 pl-4">
+
+            <h4 class="font-bold text-teal-300">
+              Desafio 2 – Sistema de pontuação
+            </h4>
+
+            <p class="text-sm text-slate-300">
+              Crie uma variável para contar quantas partes da música
+              foram completadas corretamente. Exiba a pontuação
+              no Monitor Serial.
+            </p>
+
+          </div>
+
+
+          <div class="border-l-2 border-teal-400 pl-4">
+
+            <h4 class="font-bold text-teal-300">
+              Desafio 3 – Tempo de resposta
+            </h4>
+
+            <p class="text-sm text-slate-300">
+              Estabeleça um limite de tempo para o jogador acionar
+              cada sensor. Caso ultrapasse o tempo, o jogo deverá
+              emitir um sinal sonoro de erro.
+            </p>
+
+          </div>
+
+
+          <div class="border-l-2 border-teal-400 pl-4">
+
+            <h4 class="font-bold text-teal-300">
+              Desafio 4 – Crie seu próprio jogo
+            </h4>
+
+            <p class="text-sm text-slate-300">
+              Modifique a programação para que o jogador precise
+              acionar os sensores em uma sequência aleatória.
+              Cada etapa deverá reproduzir uma parte diferente
+              da música.
+            </p>
+
+          </div>
+
+        </div>
+
+      </article>
+
+
+      <!-- REFLEXÃO FINAL -->
+      <article class="bg-teal-950/30 border border-teal-500/30 rounded-2xl p-6 space-y-3">
+
+        <h3 class="text-lg font-bold text-teal-300">
+          🧠 Análise e reflexão
+        </h3>
+
+        <p class="text-sm text-slate-300">
+          Responda às questões após concluir o projeto:
+        </p>
+
+        <ol class="list-decimal list-inside space-y-3 text-sm text-slate-300">
+
+          <li>
+            Como o Arduino consegue transformar números em notas musicais?
+          </li>
+
+          <li>
+            Qual é a função dos LEDs durante o funcionamento do jogo?
+          </li>
+
+          <li>
+            O que acontece quando o LDR é coberto?
+          </li>
+
+          <li>
+            Como você dividiu sua música em partes?
+          </li>
+
+          <li>
+            O que precisaria modificar para adicionar uma quarta etapa?
+          </li>
+
+        </ol>
+
+      </article>
+
+    </section>
       
 
   <!-- JAVASCRIPT LÓGICA COMPLETA -->
