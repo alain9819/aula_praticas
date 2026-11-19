@@ -377,7 +377,7 @@
           <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
 
             <img
-              src="led-rgb.png"
+              src="rgb.png"
               alt="Diagrama de ligação do LED RGB ao Arduino Uno"
               class="max-w-full h-auto rounded-lg"
             >
@@ -798,7 +798,7 @@
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-white flex items-center gap-2">
               <i class="fa-solid fa-microchip text-teal-400"></i>
-              Esquema de Ligação
+              Esquema de Ligação - Buzzer Piezo Modelo 1
             </h3>
             <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
               Pino Digital 8 + GND
@@ -807,7 +807,32 @@
 
           <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
             <img
-              src="tone.png"
+              src="buzzer1.png"
+              alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
+              class="max-w-full h-auto rounded-lg"
+            >
+          </div>
+
+          <figcaption class="text-xs text-slate-400 text-center">
+            Conecte o terminal positivo (+) do buzzer ao <strong class="text-slate-200">pino digital 8</strong> e o terminal negativo (–) ao <strong class="text-slate-200">GND</strong>.
+          </figcaption>
+        </figure>
+
+                <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+        <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-teal-400"></i>
+              Esquema de Ligação - Buzzer Piezo Modelo 2
+            </h3>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+              Pino Digital 8 + GND
+            </span>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+            <img
+              src="buzzer2.png"
               alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
               class="max-w-full h-auto rounded-lg"
             >
@@ -853,17 +878,14 @@
 
       <span class="text-cyan-400">void</span> <span class="text-amber-400">setup</span>() {
         <span class="text-amber-400">pinMode</span>(pinoBuzzer, <span class="text-cyan-300">OUTPUT</span>);
-
-        <span class="text-slate-500">// Toca uma frequência de 1000 Hz por 500 milissegundos (0,5 segundo)</span>
-        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">1000</span>, <span class="text-emerald-400">500</span>);
-        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">1000</span>); <span class="text-slate-500">// Espera 1 segundo</span>
       }
 
       <span class="text-cyan-400">void</span> <span class="text-amber-400">loop</span>() {
         <span class="text-slate-500">// Exemplo gerando bipes contínuos</span>
-        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>, <span class="text-emerald-400">200</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
-        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">500</span>);             <span class="text-slate-500">// Pausa de 500ms</span>
+        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
+        <span class="text-amber-400">delay</span>(<span class="text-emerald-400">200</span>);             <span class="text-slate-500">// Pausa de 500ms</span>
         <span class="text-amber-400">noTone</span>(pinoBuzzer);        <span class="text-slate-500">// Para o som (opcional se a duração já parou)</span>
+
         <span class="text-amber-400">delay</span>(<span class="text-emerald-400">500</span>);
       }</code></pre>
             </div>
@@ -1408,7 +1430,7 @@
           <div class="flex items-center justify-between">
             <h3 class="text-lg font-semibold text-white flex items-center gap-2">
               <i class="fa-solid fa-microchip text-teal-400"></i>
-              Esquema de Ligação
+              Esquema de Ligação - Buzzer Piezo Modelo 1
             </h3>
             <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
               Pino Digital 8 + GND
@@ -1417,7 +1439,32 @@
 
           <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
             <img
-              src="tone.png"
+              src="buzzer1.png"
+              alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
+              class="max-w-full h-auto rounded-lg"
+            >
+          </div>
+
+          <figcaption class="text-xs text-slate-400 text-center">
+            Conecte o terminal positivo (+) do buzzer ao <strong class="text-slate-200">pino digital 8</strong> e o terminal negativo (–) ao <strong class="text-slate-200">GND</strong>.
+          </figcaption>
+        </figure>
+
+                <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+        <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+              <i class="fa-solid fa-microchip text-teal-400"></i>
+              Esquema de Ligação - Buzzer Piezo Modelo 2
+            </h3>
+            <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+              Pino Digital 8 + GND
+            </span>
+          </div>
+
+          <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+            <img
+              src="buzzer2.png"
               alt="Diagrama de ligação do Buzzer Piezo no pino digital 8 e GND do Arduino"
               class="max-w-full h-auto rounded-lg"
             >
@@ -1468,9 +1515,9 @@
 
       <span class="text-cyan-400">void</span> <span class="text-amber-400">loop</span>() {
         <span class="text-slate-500">// Exemplo gerando bipes contínuos</span>
-        <span class="text-amber-400">tone</span>(pinoBuzzer, <span class="text-emerald-400">2000</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
+        <span class="text-amber-400">tone</span>(Buzzer, <span class="text-emerald-400">2000</span>); <span class="text-slate-500">// 2000 Hz por 200ms</span>
         <span class="text-amber-400">delay</span>(<span class="text-emerald-400">200</span>);             <span class="text-slate-500">// Pausa de 500ms</span>
-        <span class="text-amber-400">noTone</span>(pinoBuzzer);        <span class="text-slate-500">// Para o som (opcional se a duração já parou)</span>
+        <span class="text-amber-400">noTone</span>(Buzzer);        <span class="text-slate-500">// Para o som (opcional se a duração já parou)</span>
        
         <span class="text-amber-400">delay</span>(<span class="text-emerald-400">1000</span>);
       }</code></pre>
@@ -1561,7 +1608,7 @@
 
               <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
                 <img
-                  src="ldrbuzzer.png"
+                  src="ldr_buzzer1.png"
                   alt="Diagrama de ligação do LDR no pino analógico A0 e GND do Arduino"
                   class="max-w-full h-auto rounded-lg"
                 >
@@ -1571,6 +1618,34 @@
                 Conecte o terminal positivo (+) do LDR ao <strong class="text-slate-200">pino analógico A0</strong> o terminal negativo (–) ao <strong class="text-slate-200">GND</strong> terminal vcc (+) ao <strong class="text-slate-200">5V</strong>..
               </figcaption>
             </figure>
+
+
+
+                <!-- 2. Esquema de Montagem (Separado do editor de código) -->
+            <figure class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-4 shadow-lg">
+              <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white flex items-center gap-2">
+                  <i class="fa-solid fa-microchip text-teal-400"></i>
+                  Esquema de Ligação
+                </h3>
+                <span class="text-xs font-mono px-2.5 py-1 rounded-md bg-slate-800 text-slate-300 border border-slate-700">
+                  Pino analógico A0 + GND + 5v
+                </span>
+              </div>
+
+              <div class="bg-slate-950/80 border border-slate-800/80 rounded-xl p-4 flex justify-center">
+                <img
+                  src="ldr_buzzer2.png"
+                  alt="Diagrama de ligação do LDR no pino analógico A0 e GND do Arduino"
+                  class="max-w-full h-auto rounded-lg"
+                >
+              </div>
+
+              <figcaption class="text-xs text-slate-400 text-center">
+                Conecte o terminal positivo (+) do LDR ao <strong class="text-slate-200">pino analógico A0</strong> o terminal negativo (–) ao <strong class="text-slate-200">GND</strong> terminal vcc (+) ao <strong class="text-slate-200">5V</strong>..
+              </figcaption>
+            </figure>
+
 
           <!-- Desafio 1 -->
           <article id="c1-content" class="bg-slate-900 border border-slate-800 rounded-2xl p-6 space-y-5 shadow-lg">
@@ -2465,43 +2540,6 @@
 
       </article>
 
-
-      <!-- REFLEXÃO FINAL -->
-      <article class="bg-teal-950/30 border border-teal-500/30 rounded-2xl p-6 space-y-3">
-
-        <h3 class="text-lg font-bold text-teal-300">
-          🧠 Análise e reflexão
-        </h3>
-
-        <p class="text-sm text-slate-300">
-          Responda às questões após concluir o projeto:
-        </p>
-
-        <ol class="list-decimal list-inside space-y-3 text-sm text-slate-300">
-
-          <li>
-            Como o Arduino consegue transformar números em notas musicais?
-          </li>
-
-          <li>
-            Qual é a função dos LEDs durante o funcionamento do jogo?
-          </li>
-
-          <li>
-            O que acontece quando o LDR é coberto?
-          </li>
-
-          <li>
-            Como você dividiu sua música em partes?
-          </li>
-
-          <li>
-            O que precisaria modificar para adicionar uma quarta etapa?
-          </li>
-
-        </ol>
-
-      </article>
 
     </section>
       
